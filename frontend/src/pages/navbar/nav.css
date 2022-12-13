@@ -1,0 +1,22 @@
+.nav-header{
+    background-color: blue;
+    position: fixed;
+    left:0;
+    top:0;
+    width:100%;
+    color:white;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 10vh;
+}
+.nav-profile{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.nav-user-img{
+    width:30px;
+    height: 30px;
+    border-radius: 50%;
+}
