@@ -9,6 +9,7 @@ const createPost = async (req, res) => {
   const newPost = new Post({
     caption,
     tags,
+    picturePath,
     postedBy: req.user,
   });
   try {

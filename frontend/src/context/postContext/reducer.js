@@ -3,7 +3,7 @@ const postReducer = (postState, action) => {
     case "CREATE_POST":
       return {
         ...postState,
-        posts: [...postState.posts, action.payload],
+        posts: [action.payload],
       };
 
     case "LIKE_POST":

@@ -67,7 +67,7 @@ const Form = () => {
       setPostData({
         caption: " ",
         tags: "",
-        selectedFile: " ",
+        picturePath: " ",
       });
       toast.success("post created");
     } catch (error) {
@@ -109,7 +109,11 @@ const Form = () => {
 
           <input type="file" onChange={changeHandler} />
 
-          <button type="submit" className="form-btn btn-submit">
+          <button
+            type="submit"
+            className="form-btn btn-submit"
+            disabled={postData.picturePath.includes("/") ? false : true}
+          >
             Submit
           </button>
           <button className="form-btn btn-clear" onClick={clearHandler}>

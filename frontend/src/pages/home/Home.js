@@ -33,9 +33,6 @@ const Home = () => {
       <div className="home-user-container"></div>
       <div className="home-post-container">
         <Post />
-        <Post />
-        <Post />
-        <Post />
       </div>
       <div className="home-friends-container"></div>
     </div>

@@ -18,7 +18,7 @@ const Post = () => {
     token,
   } = useUser();
   console.log(posts, "posts");
-  const likeHanlder = async (id) => {
+  const likeHandler = async (id) => {
     console.log(id, "id");
     try {
       const config = {
@@ -66,31 +66,41 @@ const Post = () => {
           </div>
         ))}
       </div> */}
-      <div className="post-card">
-        <div className="post-profile-details">
-          <img src="https://images.unsplash.com/photo-1496302662116-35cc4f36df92?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjN8fHBlcnNvbnxlbnwwfHwwfHw%3D&w=1000&q=80" />
-          <p className="post-user-name">Jyoti</p>
+      {posts.map(({ _id, tags, caption, picturePath, postedBy, likes }) => (
+        <div className="post-card">
+          <div className="post-profile-details">
+            <img src={postedBy.picturePath} />
+            <p className="post-user-name">{postedBy.name}</p>
+          </div>
+          <div className="post-details">
+            <img src={picturePath} />
+            <small className="post-caption">
+              <strong> Jyoit:</strong>
+              {caption}
+            </small>
+            <small className="post-tags">{tags.map((tag) => `#${tag} `)}</small>
+          </div>
+          <div className="post-btn">
+            <button
+              className="btn post-like-btn"
+              onClick={() => likeHandler(_id)}
+            >
+              <FavoriteBorderOutlinedIcon
+                style={{
+                  backgroundColor: likes.length > 0 ? "red" : "inherit",
+                }}
+              />{" "}
+              like {likes.length}
+            </button>
+            <button className="btn post-comm-btn">
+              <ModeCommentOutlinedIcon />
+            </button>
+            <button className="btn post-save-btn">
+              <BookmarkBorderOutlinedIcon />
+            </button>
+          </div>
         </div>
-        <div className="post-details">
-          <img src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" />
-          <small className="post-caption">
-            <strong> Jyoit:</strong>
-            No caption needed
-          </small>
-          <small className="post-tags">#happy #newlife #wedding</small>
-        </div>
-        <div className="post-btn">
-          <button className="btn post-like-btn">
-            <FavoriteBorderOutlinedIcon />
-          </button>
-          <button className="btn post-comm-btn">
-            <ModeCommentOutlinedIcon />
-          </button>
-          <button className="btn post-save-btn">
-            <BookmarkBorderOutlinedIcon />
-          </button>
-        </div>
-      </div>
+      ))}
     </div>
   );
 };
