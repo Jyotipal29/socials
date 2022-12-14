@@ -15,6 +15,7 @@ export const PostProvider = ({ children }) => {
   const [postState, postDispatch] = useReducer(postReducer, {
     posts: [],
     post: [],
+    savedPost: [],
   });
 
   return (

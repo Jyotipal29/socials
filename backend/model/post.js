@@ -19,10 +19,12 @@ const postSchema = mongoose.Schema(
       type: [String],
       default: [],
     },
-    comments: {
-      type: Array,
-      default: [],
-    },
+    comments: [
+      {
+        text: String,
+        postedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+      },
+    ],
   },
   { timestamps: true }
 );

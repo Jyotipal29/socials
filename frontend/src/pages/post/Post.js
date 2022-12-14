@@ -1,14 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./post.css";
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
 import ModeCommentOutlinedIcon from "@mui/icons-material/ModeCommentOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import { usePost } from "../../context/postContext/context";
 import { Button } from "@mui/material";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { useUser } from "../../context/userContext/context";
 import { api } from "../../constants/api";
 const Post = () => {
+  const [showComm, setShowComm] = useState(false);
+  const [commText, setCommText] = useState(" ");
+  const [data, setData] = useState([]);
   const {
     postState: { posts },
     postDispatch,
@@ -18,6 +22,25 @@ const Post = () => {
     token,
   } = useUser();
   console.log(posts, "posts");
+
+  useEffect(() => {
+    getAllFeedPosts();
+  }, []);
+
+  const getAllFeedPosts = async () => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const { data } = await axios.get(`${api}post/followingpost`, config);
+    console.log(data, "feed data");
+    postDispatch({
+      type: "GET_POSTS",
+      payload: data,
+    });
+  };
+
   const likeHandler = async (id) => {
     console.log(id, "id");
     try {
@@ -37,6 +60,29 @@ const Post = () => {
       console.log(error);
     }
   };
+  const commentClickHandler = () => {
+    setShowComm((prev) => !prev);
+  };
+
+  const commentHandler = async (postId) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    try {
+      const { data } = await axios.put(
+        `${api}post/comment`,
+        { postId, commText },
+        config
+      );
+      console.log(data, "comment data");
+      setCommText(" ");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const deleteHandler = async (id) => {
     // try {
     //     const config = {
@@ -48,6 +94,25 @@ const Post = () => {
     // } catch (error) {
     //   console.log(error);
     // }
+  };
+
+  const saveHandler = async (id) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const { data } = await axios.post(
+      `${api}save/toggleSavePost`,
+      { postid: id },
+      config
+    );
+
+    postDispatch({
+      type: "TOGGEL_SAVE",
+      payload: data,
+    });
+    console.log(data, "saved data");
   };
   return (
     <div className="feed-post-container">
@@ -68,14 +133,27 @@ const Post = () => {
       </div> */}
       {posts.map(({ _id, tags, caption, picturePath, postedBy, likes }) => (
         <div className="post-card">
-          <div className="post-profile-details">
-            <img src={postedBy.picturePath} />
-            <p className="post-user-name">{postedBy.name}</p>
-          </div>
+          <Link
+            to={
+              postedBy._id !== user._id
+                ? `/profile/${postedBy._id}`
+                : "/profile"
+            }
+            style={{
+              textDecoration: "none",
+              color: "inherit",
+            }}
+          >
+            <div className="post-profile-details">
+              <img src={postedBy.picturePath} />
+              <p className="post-user-name">{postedBy.name}</p>
+            </div>
+          </Link>
+
           <div className="post-details">
             <img src={picturePath} />
             <small className="post-caption">
-              <strong> Jyoit:</strong>
+              <strong>{user.name}:</strong>
               {caption}
             </small>
             <small className="post-tags">{tags.map((tag) => `#${tag} `)}</small>
@@ -92,12 +170,30 @@ const Post = () => {
               />{" "}
               like {likes.length}
             </button>
-            <button className="btn post-comm-btn">
+            <button className="btn post-comm-btn" onClick={commentClickHandler}>
               <ModeCommentOutlinedIcon />
             </button>
-            <button className="btn post-save-btn">
+            <button
+              className="btn post-save-btn"
+              onClick={() => saveHandler(_id)}
+            >
               <BookmarkBorderOutlinedIcon />
             </button>
+          </div>
+          <div>
+            {showComm && (
+              <>
+                <input
+                  type="text"
+                  value={commText}
+                  onChange={(e) => setCommText(e.target.value)}
+                />
+                <button onClick={() => commentHandler(_id)}>comment</button>
+                <div>
+                  <span>{commText}</span>
+                </div>
+              </>
+            )}
           </div>
         </div>
       ))}

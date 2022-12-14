@@ -5,12 +5,16 @@ const {
   getFeedPosts,
   getMyPosts,
   likePost,
+  commentInPost,
+  getMyFollowingPosts,
 } = require("../controller/posts");
 const { protect } = require("../middleware/auth");
-router.get("/", getFeedPosts);
-router.post("/", protect, createPost);
+router.get("/", protect, getFeedPosts);
 router.get("/mypost", protect, getMyPosts);
+router.get("/followingpost", protect, getMyFollowingPosts);
 
-/* UPDATE */
+router.post("/", protect, createPost);
+router.put("/comment", protect, commentInPost);
+
 router.patch("/:id/like", protect, likePost);
 module.exports = router;

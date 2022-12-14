@@ -18,7 +18,7 @@ const Profile = () => {
 
   useEffect(() => {
     getMyPost();
-  }, []);
+  }, [user]);
   const getMyPost = async () => {
     const config = {
       headers: {
@@ -37,9 +37,9 @@ const Profile = () => {
         <div>
           <h2 className="user-name">{user.name}</h2>
           <div className="follow-details">
-            <span>0 post</span>
-            <span>0 followers</span>
-            <span>0 following</span>
+            <span>{data?.length} post</span>
+            <span>{user?.followers?.length}followers</span>
+            <span>{user?.following?.length} following</span>
           </div>
         </div>
         <button>edit</button>

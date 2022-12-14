@@ -4,6 +4,7 @@ import "./home.css";
 import { api } from "../../constants/api";
 import axios from "axios";
 import Post from "../post/Post";
+import Sidenav from "../sidenav/Sidenav";
 const Home = () => {
   const {
     userState: { user },
@@ -30,7 +31,7 @@ const Home = () => {
   }, [user]);
   return (
     <div className="home-container">
-      <div className="home-user-container"></div>
+      <div className="home-user-container">{/* <Sidenav /> */}</div>
       <div className="home-post-container">
         <Post />
       </div>

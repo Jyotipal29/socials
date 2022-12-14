@@ -1,0 +1,18 @@
+.sidenav-container{
+    position: fixed;
+    top:60px;
+}
+
+.sidenav-wrapper{
+    height: 100vh;
+
+}
+
+.sidenav-wrapper ul{
+    list-style-type: none;
+}
+
+.sidenav-wrapper ul li{
+    padding:20px 10px;
+font-size: 20px;
+}

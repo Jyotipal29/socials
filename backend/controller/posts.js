@@ -23,8 +23,37 @@ const createPost = async (req, res) => {
 // /* READ */ all posts
 const getFeedPosts = async (req, res) => {
   try {
-    const post = await Post.find().populate("postedBy", "_id name");
+    const post = await Post.find().populate("postedBy", "_id name picturePath");
     res.status(200).json(post);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+};
+
+//post created by my followiings
+const getMyFollowingPosts = async (req, res) => {
+  try {
+    const followingPosts = await Post.find({
+      postedBy: { $in: req.user.following },
+    })
+      .populate("postedBy", "_id name picturePath")
+      .sort("-createdAt");
+
+    const posts = await Post.find({ postedBy: req.user._id }).populate(
+      "postedBy",
+      "_id name picturePath"
+    );
+
+    let allPosts = [];
+    followingPosts.forEach((post) => {
+      allPosts.push(post);
+    });
+
+    posts.forEach((post) => {
+      allPosts.push(post);
+    });
+
+    res.status(200).json(allPosts);
   } catch (err) {
     res.status(404).json({ message: err.message });
   }
@@ -35,7 +64,7 @@ const getMyPosts = async (req, res) => {
     // const { userId } = req.params;
     const post = await Post.find({ postedBy: req.user._id }).populate(
       "postedBy",
-      "_id name"
+      "_id name picturePath"
     );
     res.status(200).json(post);
   } catch (err) {
@@ -68,7 +97,9 @@ const likePost = async (req, res) => {
       );
     }
 
-    const updatedPost = await Post.findByIdAndUpdate(id, post, { new: true });
+    const updatedPost = await Post.findByIdAndUpdate(id, post, {
+      new: true,
+    }).populate("postedBy", "_id name picturePath");
 
     res.status(200).json(updatedPost);
   } catch (err) {
@@ -77,9 +108,36 @@ const likePost = async (req, res) => {
   }
 };
 
+const commentInPost = async (req, res) => {
+  // const { id } = req.params;
+  const comment = {
+    text: req.body.text,
+    postedBy: req.user._id,
+  };
+  Post.findByIdAndUpdate(
+    req.body.postId,
+    {
+      $push: { comments: comment },
+    },
+    {
+      new: true,
+    }
+  )
+    .populate("comments.postedBy", "_id name")
+    .exec((err, result) => {
+      if (err) {
+        return res.status(422).json({ error: err });
+      } else {
+        res.json(result);
+      }
+    });
+};
+
 module.exports = {
   createPost,
   getFeedPosts,
   getMyPosts,
   likePost,
+  commentInPost,
+  getMyFollowingPosts,
 };

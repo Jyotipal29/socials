@@ -1,27 +1,34 @@
-export const UserReducer = (state, action) => {
+export const UserReducer = (userState, action) => {
   switch (action.type) {
     case "GET_USER":
       return {
-        ...state,
+        ...userState,
         user: action.payload,
+      };
+    case "UPDATE":
+      return {
+        ...userState,
+        ...userState.user,
+        followers: action.payload.followers,
+        following: action.payload.following,
       };
     case "LOGIN":
       return {
-        ...state,
+        ...userState,
         user: action.payload,
       };
     case "REGISTER":
       return {
-        ...state,
+        ...userState,
         user: action.payload,
       };
     case "LOGOUT":
       return {
-        ...state,
+        ...userState,
         user: null,
       };
 
     default:
-      return state;
+      return userState;
   }
 };

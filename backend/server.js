@@ -8,6 +8,7 @@ const errorHandler = require("./middleware/error");
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/users");
 const postRouter = require("./routes/post");
+const saveRouter = require("./routes/save");
 connectDB();
 const app = express();
 app.use(cors());
@@ -28,6 +29,7 @@ app.use(
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
 app.use("/post", postRouter);
+app.use("/save", saveRouter);
 app.use(errorHandler);
 
 const port = process.env.PORT || 3001;

@@ -29,6 +29,8 @@ const register = async (req, res) => {
     email,
     password: hashedPassword,
     picturePath,
+    followers,
+    following,
   });
   if (user) {
     res.status(201).json({
@@ -37,6 +39,8 @@ const register = async (req, res) => {
       email: user.email,
       token: generateToken(user._id),
       picturePath,
+      followers,
+      following,
     });
   } else {
     res.status(400);
