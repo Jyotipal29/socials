@@ -77,7 +77,7 @@ const Register = () => {
 
       navigate("/");
     } catch (error) {
-      console.log(error, "error");
+      console.log(error.response.data, "error");
       toast.error("something went wrong");
 
       // setError(error.response.data.error);

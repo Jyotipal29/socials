@@ -6,11 +6,10 @@ import axios from "axios";
 import { api } from "../../constants/api";
 const OtherProfile = () => {
   const { id } = useParams();
-  console.log(id, "user id from params");
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState([]);
   const [showFollow, setShowFollow] = useState(true);
-  console.log(profileData, "other user data");
+  // console.log(profileData, "other user data");
   const {
     userState: { user },
     userDispatch,
@@ -30,11 +29,19 @@ const OtherProfile = () => {
       },
     };
     const { data } = await axios.get(`${api}user/user/${id}`, config);
-    console.log(data.userPosts, "data");
+    // console.log(data.userPosts, "data");
     setProfileData(data);
   };
 
   // follow
+  // updating the value of 'showFollow'
+  useEffect(() => {
+    user.following.forEach((followingUser) => {
+      if (followingUser == id) {
+        setShowFollow(false);
+      }
+    });
+  }, []);
 
   // const followUser = async () => {
 
@@ -59,7 +66,7 @@ const OtherProfile = () => {
         following: data.following,
       },
     });
-    console.log(data, "follow data");
+    // console.log(data, "follow data");
     localStorage.setItem("user", JSON.stringify(data));
     setProfileData((prev) => {
       return {
@@ -95,7 +102,7 @@ const OtherProfile = () => {
         following: data.following,
       },
     });
-    console.log(data, "follow data");
+    // console.log(data, "follow data");
     localStorage.setItem("user", JSON.stringify(data));
     setProfileData((prev) => {
       const newFollower = prev.user.followers.filter((it) => it != data._id);

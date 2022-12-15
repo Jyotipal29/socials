@@ -1,3 +1,5 @@
+import { Action } from "@remix-run/router";
+
 export const UserReducer = (userState, action) => {
   switch (action.type) {
     case "GET_USER":
@@ -8,9 +10,11 @@ export const UserReducer = (userState, action) => {
     case "UPDATE":
       return {
         ...userState,
-        ...userState.user,
-        followers: action.payload.followers,
-        following: action.payload.following,
+        user: {
+          ...userState.user,
+          followers: action.payload.followers,
+          following: action.payload.following,
+        },
       };
     case "LOGIN":
       return {

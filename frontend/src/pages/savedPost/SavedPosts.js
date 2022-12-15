@@ -10,7 +10,7 @@ import Post from "../post/Post";
 
 const SavedPosts = () => {
   const [data, setData] = useState([]);
-  console.log(data, "actual data");
+  // console.log(data, "actual data");
   const {
     postState: { SavedPosts },
     postDispatch,

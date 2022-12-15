@@ -18,6 +18,20 @@ const Profile = () => {
     setIsAuth,
   } = useUser();
 
+  // useEffect(() => {
+  //   const data = localStorage.getItem("user");
+  //   console.log("--------");
+
+  //   console.log(data);
+  //   console.log("--------");
+  //   console.log(user);
+  //   console.log("====");
+  //   userDispatch({
+  //     type: "UPDATE",
+  //     payload: data,
+  //   });
+  // }, []);
+
   useEffect(() => {
     getMyPost();
   }, [user]);
@@ -28,7 +42,6 @@ const Profile = () => {
       },
     };
     const { data } = await axios.get(`${api}post/mypost`, config);
-    console.log(data, "data");
     setData(data);
   };
   const logoutHandler = () => {

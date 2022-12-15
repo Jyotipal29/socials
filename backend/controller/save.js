@@ -18,11 +18,9 @@ const toggleSavePost = async (req, res) => {
 
     let usersaved = await user.save();
     res.status(200).json(usersaved);
-  } catch (err) {
-    res.status(500).json({
-      message: err.message,
-      stack: err.stack,
-    });
+  } catch (error) {
+    res.status(500);
+    throw new Error(error);
   }
 };
 
@@ -31,14 +29,18 @@ const getSavedPosts = async (req, res) => {
     const userid = req.user.id;
     let user = await User.findById(userid)
       .populate("savedPosts")
-
+      .populate({
+        path: "savedPosts",
+        populate: {
+          path: "postedBy",
+          model: "User",
+        },
+      })
       .exec();
     res.status(200).json(user.savedPosts);
-  } catch (err) {
-    res.status(500).json({
-      message: err.message,
-      stack: err.stack,
-    });
+  } catch (error) {
+    res.status(500);
+    throw new Error(error);
   }
 };
 

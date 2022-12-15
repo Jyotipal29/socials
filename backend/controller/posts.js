@@ -16,7 +16,8 @@ const createPost = async (req, res) => {
     await newPost.save();
     res.status(201).json(newPost);
   } catch (error) {
-    res.status(409).json(error);
+    res.status(409);
+    throw new Error(error);
   }
 };
 
@@ -25,8 +26,9 @@ const getFeedPosts = async (req, res) => {
   try {
     const post = await Post.find().populate("postedBy", "_id name picturePath");
     res.status(200).json(post);
-  } catch (err) {
-    res.status(404).json({ message: err.message });
+  } catch (error) {
+    res.status(404);
+    throw new Error(error);
   }
 };
 
@@ -54,8 +56,9 @@ const getMyFollowingPosts = async (req, res) => {
     });
 
     res.status(200).json(allPosts);
-  } catch (err) {
-    res.status(404).json({ message: err.message });
+  } catch (error) {
+    res.status(404);
+    throw new Error(error);
   }
 };
 
@@ -67,8 +70,10 @@ const getMyPosts = async (req, res) => {
       "_id name picturePath"
     );
     res.status(200).json(post);
-  } catch (err) {
-    res.status(404).json({ message: err.message });
+  } catch (error) {
+    res.status(404);
+
+    throw new Error({ message: err.message });
   }
 };
 
@@ -102,9 +107,9 @@ const likePost = async (req, res) => {
     }).populate("postedBy", "_id name picturePath");
 
     res.status(200).json(updatedPost);
-  } catch (err) {
+  } catch (error) {
     res.status(404);
-    throw new Error(err);
+    throw new Error(error);
   }
 };
 
@@ -124,9 +129,10 @@ const commentInPost = async (req, res) => {
     }
   )
     .populate("comments.postedBy", "_id name")
-    .exec((err, result) => {
-      if (err) {
-        return res.status(422).json({ error: err });
+    .exec((error, result) => {
+      if (error) {
+        res.status(422);
+        throw new Error(error);
       } else {
         res.json(result);
       }

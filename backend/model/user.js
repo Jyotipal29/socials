@@ -31,18 +31,16 @@ const UserSchema = new mongoose.Schema(
       default: [],
       ref: "Post",
     },
-    followers: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
-    following: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
+    followers: {
+      type: [mongoose.Schema.Types.ObjectId],
+      default: [],
+      ref: "User",
+    },
+    following: {
+      type: [mongoose.Schema.Types.ObjectId],
+      default: [],
+      ref: "User",
+    },
   },
   { timestamps: true }
 );

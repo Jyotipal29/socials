@@ -24,8 +24,9 @@ const Post = (item) => {
     userState: { user },
     token,
   } = useUser();
-  console.log(posts, "posts");
+  // console.log(posts, "posts");
 
+  //like
   const likeHandler = async (id) => {
     console.log(id, "id");
     try {
@@ -45,10 +46,13 @@ const Post = (item) => {
       console.log(error);
     }
   };
+
+  // comment
   const commentClickHandler = () => {
     setShowComm((prev) => !prev);
   };
 
+  // commment
   const commentHandler = async (postId) => {
     const config = {
       headers: {
@@ -62,12 +66,14 @@ const Post = (item) => {
         { postId, commText },
         config
       );
-      console.log(data, "comment data");
+      // console.log(data, "comment data");
       setCommText(" ");
     } catch (error) {
       console.log(error);
     }
   };
+
+  // delete handler
   const deleteHandler = async (id) => {
     // try {
     //     const config = {
@@ -80,6 +86,8 @@ const Post = (item) => {
     //   console.log(error);
     // }
   };
+
+  // save handler
 
   const saveHandler = async (id) => {
     const config = {
@@ -97,7 +105,7 @@ const Post = (item) => {
       type: "TOGGEL_SAVE",
       payload: data,
     });
-    console.log(data, "saved data");
+    // console.log(data, "saved data");
   };
   return (
     <div className="feed-post-container">
