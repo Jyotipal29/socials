@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./post.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
 import ModeCommentOutlinedIcon from "@mui/icons-material/ModeCommentOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
@@ -169,6 +171,7 @@ const Post = (item) => {
           )}
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

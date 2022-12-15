@@ -5,7 +5,7 @@ const register = async (req, res) => {
   let { name, email, password, picturePath } = req.body["formData"];
   // picturePath = JSON.stringify(picturePath);
 
-  if (!name || !email || !password) {
+  if (!name || !email || !password || !picturePath) {
     res.status(400);
     throw new Error("please add all fields");
   }
@@ -29,8 +29,6 @@ const register = async (req, res) => {
     email,
     password: hashedPassword,
     picturePath,
-    followers,
-    following,
   });
   if (user) {
     res.status(201).json({
@@ -39,8 +37,6 @@ const register = async (req, res) => {
       email: user.email,
       token: generateToken(user._id),
       picturePath,
-      followers,
-      following,
     });
   } else {
     res.status(400);

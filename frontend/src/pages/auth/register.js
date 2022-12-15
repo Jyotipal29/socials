@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { api } from "../../constants/api";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../../context/userContext/context";
@@ -71,10 +73,12 @@ const Register = () => {
         setIsAuth(true);
         setToken(token);
       }
+      toast.success("registred successfuly");
 
       navigate("/");
     } catch (error) {
       console.log(error, "error");
+      toast.error("something went wrong");
 
       // setError(error.response.data.error);
       setTimeout(() => {
@@ -86,7 +90,7 @@ const Register = () => {
     <div className="auth-container">
       <div className="auth-wrapper">
         <form className="auth-form">
-          <h2 className="auth-form-heading">Register</h2>
+          <h2 className="auth-heading">Register</h2>
           {error && <span className="error-message">{error}</span>}
           <div className="auth-form-control">
             <small>Name</small>
@@ -116,26 +120,10 @@ const Register = () => {
               }
             />
           </div>
-          {/* <div className="auth-form-control">
-            <small> confirm password</small>
-            <input
-              type="password"
-              placeholder=" confirm password"
-              onChange={(e) => setCnfPassword(e.target.value)}
-            />
-          </div> */}
+
           <div className="auth-form-control">
-            <label>picture</label>
-            <input type="file" onChange={imgHandler} />
-            {/* <button onClick={imgHandler}>upload</button> */}
-            {/* <FileBase
-              type="file"
-              multiple={false}
-              onDone={({ base64 }) =>
-                setFormData({ ...formData, picturePath: base64 })
-              }
-              className="form-file-base"
-            /> */}
+            <small>picture</small>
+            <input className="pic-input" type="file" onChange={imgHandler} />
           </div>
 
           <button onClick={registerHandler} className="auth-btn">
@@ -146,6 +134,7 @@ const Register = () => {
           </button>
         </form>
       </div>
+      <ToastContainer />
     </div>
   );
 };

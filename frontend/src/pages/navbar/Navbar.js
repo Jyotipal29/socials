@@ -63,7 +63,7 @@ const Navbar = () => {
           </Link>
         </ul>
       ) : (
-        <div>
+        <div className="nav-login-btn">
           <Link
             to="/login"
             style={{ textDecoration: "none", color: "inherit" }}
