@@ -29,7 +29,10 @@ const toggleSavePost = async (req, res) => {
 const getSavedPosts = async (req, res) => {
   try {
     const userid = req.user.id;
-    let user = await User.findById(userid).populate("savedPosts").exec();
+    let user = await User.findById(userid)
+      .populate("savedPosts")
+
+      .exec();
     res.status(200).json(user.savedPosts);
   } catch (err) {
     res.status(500).json({

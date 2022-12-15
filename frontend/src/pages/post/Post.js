@@ -9,7 +9,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useUser } from "../../context/userContext/context";
 import { api } from "../../constants/api";
-const Post = () => {
+const Post = (item) => {
+  console.log(item, "all data in obj");
   const [showComm, setShowComm] = useState(false);
   const [commText, setCommText] = useState(" ");
   const [data, setData] = useState([]);
@@ -22,24 +23,6 @@ const Post = () => {
     token,
   } = useUser();
   console.log(posts, "posts");
-
-  useEffect(() => {
-    getAllFeedPosts();
-  }, []);
-
-  const getAllFeedPosts = async () => {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    const { data } = await axios.get(`${api}post/followingpost`, config);
-    console.log(data, "feed data");
-    postDispatch({
-      type: "GET_POSTS",
-      payload: data,
-    });
-  };
 
   const likeHandler = async (id) => {
     console.log(id, "id");
@@ -116,87 +99,76 @@ const Post = () => {
   };
   return (
     <div className="feed-post-container">
-      {/* <div>
-        {posts.map((item) => (
-          <div style={{ border: "1px solid black" }}>
-            <img src={item.picturePath} />
-            <p>{item.caption}</p>
-            <h4>{item.tags.map((tag) => `#${tag} `)}</h4>
-            <div>
-              <button onClick={() => likeHanlder(item._id)}>
-                like {item.likes.length}
-              </button>
-              <button onClick={() => deleteHandler(item._id)}>delete</button>
-            </div>
+      <div className="post-card">
+        <Link
+          to={
+            item.item.postedBy._id !== user._id
+              ? `/profile/${item.item.postedBy._id}`
+              : "/profile"
+          }
+          style={{
+            textDecoration: "none",
+            color: "inherit",
+          }}
+        >
+          <div className="post-profile-details">
+            <img src={item.item.postedBy.picturePath} />
+            <p className="post-user-name">{item.item.postedBy.name}</p>
           </div>
-        ))}
-      </div> */}
-      {posts.map(({ _id, tags, caption, picturePath, postedBy, likes }) => (
-        <div className="post-card">
-          <Link
-            to={
-              postedBy._id !== user._id
-                ? `/profile/${postedBy._id}`
-                : "/profile"
-            }
-            style={{
-              textDecoration: "none",
-              color: "inherit",
-            }}
-          >
-            <div className="post-profile-details">
-              <img src={postedBy.picturePath} />
-              <p className="post-user-name">{postedBy.name}</p>
-            </div>
-          </Link>
+        </Link>
 
-          <div className="post-details">
-            <img src={picturePath} />
-            <small className="post-caption">
-              <strong>{user.name}:</strong>
-              {caption}
-            </small>
-            <small className="post-tags">{tags.map((tag) => `#${tag} `)}</small>
-          </div>
-          <div className="post-btn">
-            <button
-              className="btn post-like-btn"
-              onClick={() => likeHandler(_id)}
-            >
-              <FavoriteBorderOutlinedIcon
-                style={{
-                  backgroundColor: likes.length > 0 ? "red" : "inherit",
-                }}
-              />{" "}
-              like {likes.length}
-            </button>
-            <button className="btn post-comm-btn" onClick={commentClickHandler}>
-              <ModeCommentOutlinedIcon />
-            </button>
-            <button
-              className="btn post-save-btn"
-              onClick={() => saveHandler(_id)}
-            >
-              <BookmarkBorderOutlinedIcon />
-            </button>
-          </div>
-          <div>
-            {showComm && (
-              <>
-                <input
-                  type="text"
-                  value={commText}
-                  onChange={(e) => setCommText(e.target.value)}
-                />
-                <button onClick={() => commentHandler(_id)}>comment</button>
-                <div>
-                  <span>{commText}</span>
-                </div>
-              </>
-            )}
-          </div>
+        <div className="post-details">
+          <img src={item.item.picturePath} />
+          <small className="post-caption">
+            <strong style={{ color: "#0f172a" }}>
+              {item.item.postedBy.name}{" "}
+            </strong>
+            {item.item.caption}
+          </small>
+          <small className="post-tags">
+            {item.item.tags.map((tag) => `#${tag} `)}
+          </small>
         </div>
-      ))}
+        <div className="post-btn">
+          <button
+            className="btn post-like-btn"
+            onClick={() => likeHandler(item.item._id)}
+          >
+            <FavoriteBorderOutlinedIcon
+              style={{
+                backgroundColor: item.item.likes.length > 0 ? "red" : "inherit",
+              }}
+            />{" "}
+            like {item.item.likes.length}
+          </button>
+          <button className="btn post-comm-btn" onClick={commentClickHandler}>
+            <ModeCommentOutlinedIcon />
+          </button>
+          <button
+            className="btn post-save-btn"
+            onClick={() => saveHandler(item.item._id)}
+          >
+            <BookmarkBorderOutlinedIcon />
+          </button>
+        </div>
+        <div>
+          {showComm && (
+            <>
+              <input
+                type="text"
+                value={commText}
+                onChange={(e) => setCommText(e.target.value)}
+              />
+              <button onClick={() => commentHandler(item.item._id)}>
+                comment
+              </button>
+              <div>
+                <span>{commText}</span>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

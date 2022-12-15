@@ -1,22 +1,35 @@
 .nav-header{
-    background-color: blue;
+    /* background-color: blue; */
     position: fixed;
     left:0;
     top:0;
     width:100%;
-    color:white;
+    z-index: 99999999999;
+     box-shadow: 0 2px 4px -1px rgba(0,0,0,0.25); 
+    color:blue;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     height: 10vh;
+}
+.nav-header .logo{
+    font-size: 30px;
+    font-weight: bold;
+    margin-left:30px;
 }
 .nav-profile{
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-right: 30px;
+}
+
+.nav-profile-item{
+    margin-right:10px;
+    font-weight: 700;
 }
 .nav-user-img{
-    width:30px;
-    height: 30px;
+    width:40px;
+    height: 40px;
     border-radius: 50%;
 }

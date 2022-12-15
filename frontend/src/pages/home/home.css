@@ -1,20 +1,5 @@
 .home-container{
-    margin-top:80px;
-    padding:10px 25px;
-    text-align: center;
-    display: grid;
-    grid-template-columns:1fr 2fr 1fr;
-    gap:30px;
+   max-width:800px ;
+   margin: 100px auto;
 }
 
-.home-user-container{
-    /* border:1px solid black; */
-}
-.home-post-container{
-    /* border:1px solid black; */
-
-}
-.home-friends-container{
-    /* border:1px solid black; */
-
-}

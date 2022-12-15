@@ -78,49 +78,62 @@ const Form = () => {
   const clearHandler = () => {};
   return (
     <div className="create-form-container">
-      <form className="form" onSubmit={submitHandler}>
-        <h2 className="form-heading">form</h2>
+      <div className="create-form-wrapper">
+        <form className="create-form" onSubmit={submitHandler}>
+          <h2 className="form-heading">Create Post</h2>
 
-        <div className="form-control">
-          <label>caption</label>
-          <input
-            className="form-input"
-            name="caption"
-            value={postData.caption}
-            onChange={(e) =>
-              setPostData({ ...postData, caption: e.target.value })
-            }
-          />
-        </div>
+          <div className="form-control">
+            <label>caption</label>
+            <input
+              className="form-input"
+              name="caption"
+              value={postData.caption}
+              onChange={(e) =>
+                setPostData({ ...postData, caption: e.target.value })
+              }
+            />
+          </div>
 
-        <div className="form-control">
-          <label>tags</label>
-          <input
-            className="form-input"
-            name="tags"
-            value={postData.tags}
-            onChange={(e) =>
-              setPostData({ ...postData, tags: e.target.value.split(",") })
-            }
-          />
-        </div>
-        <div className="form-control">
-          <label>picture</label>
+          <div className="form-control">
+            <label>tags</label>
+            <input
+              className="form-input"
+              name="tags"
+              value={postData.tags}
+              onChange={(e) =>
+                setPostData({ ...postData, tags: e.target.value.split(",") })
+              }
+            />
+          </div>
+          <div className="form-control">
+            <label>picture</label>
 
-          <input type="file" onChange={changeHandler} />
+            <input
+              className="pic-input"
+              placeholder="upload pic"
+              type="file"
+              onChange={changeHandler}
+            />
 
-          <button
-            type="submit"
-            className="form-btn btn-submit"
-            disabled={postData.picturePath.includes("/") ? false : true}
-          >
-            Submit
-          </button>
-          <button className="form-btn btn-clear" onClick={clearHandler}>
-            clear
-          </button>
-        </div>
-      </form>
+            <button
+              type="submit"
+              className="form-btn btn-submit"
+              disabled={postData.picturePath.includes("/") ? false : true}
+              style={{
+                backgroundColor: postData.picturePath.includes("/")
+                  ? "blue"
+                  : "white",
+              }}
+            >
+              Submit
+            </button>
+            {/* <button className="form-btn btn-clear" onClick={clearHandler}>
+              clear
+            </button> */}
+          </div>
+        </form>
+      </div>
+
       <ToastContainer />
     </div>
   );

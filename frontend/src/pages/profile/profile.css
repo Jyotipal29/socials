@@ -9,12 +9,10 @@
     align-items: center;
     border-bottom: 1px solid black;
     padding: 5px 50px;
+    /* background-color: blue; */
 }
 
-/* .follow-details{
-    padding:0px 10px;
-    margin: 0 10px;
-} */
+
 .user-name{
     text-align: center;
 }
@@ -27,7 +25,6 @@
     border-radius: 50%;
 }
 .profile-gallary{
-  margin: 10px 20px;
     display: grid;
     grid-template-columns: repeat(3,1fr);
     gap:10px;
@@ -35,4 +32,39 @@
 .item{
     width:250px;
     height: 300px;
+  padding:10px;
+
+}
+ .profile-logout-btn , .profile-edit-btn{
+        padding:8px 15px ;
+        background-color: blue;
+        color:white;
+        outline: none;
+        border:none;
+        display: block;
+        font-size: 15px;
+    }
+
+@media  (max-width:600px) {
+    .user-details{
+        /* background-color: blue; */
+    padding: 5px 10px;
+
+    }
+   
+    .profile-user-follow{
+        margin-right:30px;
+    }
+    .follow-details{
+        display: flex;
+        flex-direction: column;
+    }
+    .profile-gallary{
+ 
+    grid-template-columns: repeat(2,1fr);
+}
+    .item{
+        width:170px;
+        height: 200px;
+    }
 }

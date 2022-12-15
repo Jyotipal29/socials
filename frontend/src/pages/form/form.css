@@ -1,5 +1,55 @@
 .create-form-container{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+   max-width: 800px;
+   margin:100px auto;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+.create-form-wrapper{
+box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+padding:10px 40px;
+width:250px;
+}
+.create-form{
+
+}
+
+.form-heading{
+    text-align: center;
+}
+.form-control{
+
+}
+
+.form-control label{
+    display: block;
+    margin-top:10px;
+    color:#475569;
+}
+
+.form-input{
+    display: block;
+    width:100%;
+    padding:20px 10px;
+    outline: none;
+}
+.pic-input{
+    padding:10px;
+    display: block;
+    border:1px solid black;
+    margin-bottom: 10px;
+    outline: none;
+
+}
+
+
+.form-btn{
+    display: block;
+    width:100%;
+    padding:10px 0px;
+    color:white;
+    font-size: 15px;
+    border:none;
+    outline: none;
 }

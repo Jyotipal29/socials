@@ -116,18 +116,22 @@ const OtherProfile = () => {
         <img src={profileData?.user?.picturePath} className="profile-img" />
         <div>
           <h2 className="user-name">{profileData?.user?.name}</h2>
-          {showFollow ? (
-            <button onClick={followhandler}>follow</button>
-          ) : (
-            <button onClick={unfollowhandler}>unfollow</button>
-          )}
+
           <div className="follow-details">
             <span>{profileData?.userPosts?.length} post</span>
             <span>{profileData?.user?.followers?.length} followers</span>
             <span>{profileData?.user?.following?.length}following</span>
           </div>
         </div>
-        <button>edit</button>
+        {showFollow ? (
+          <button className="profile-logout-btn" onClick={followhandler}>
+            follow
+          </button>
+        ) : (
+          <button className="profile-logout-btn" onClick={unfollowhandler}>
+            unfollow
+          </button>
+        )}
       </div>
 
       <div className="profile-gallary">

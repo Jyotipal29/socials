@@ -1,4 +1,7 @@
 import React from "react";
+import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
+import ExploreOutlinedIcon from "@mui/icons-material/ExploreOutlined";
+import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import "./nav.css";
 
@@ -14,41 +17,51 @@ const Navbar = () => {
     isAuth,
     setIsAuth,
   } = useUser();
-  const logoutHandler = () => {
-    userDispatch({ type: "LOGOUT" });
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-    localStorage.removeItem("isAuth");
-    setIsAuth(false);
-    setToken(" ");
-    navigate("/login");
-  };
+  // const logoutHandler = () => {
+  //   userDispatch({ type: "LOGOUT" });
+  //   localStorage.removeItem("user");
+  //   localStorage.removeItem("token");
+  //   localStorage.removeItem("isAuth");
+  //   setIsAuth(false);
+  //   setToken(" ");
+  //   navigate("/login");
+  // };
   return (
     <div className="nav-header">
       <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
-        <div className="logo">jyogram</div>
+        <div className="logo">Jyogram</div>
       </Link>
       {user ? (
-        <div className="nav-profile">
+        <ul className="nav-profile">
           <Link to="/profile">
-            <img src={user.picturePath} className="nav-user-img" />
+            <li className="nav-profile-item">
+              <img src={user.picturePath} className="nav-user-img" />
+            </li>
           </Link>
-          <div
-            style={{
-              margin: "5px 10px",
-              border: "1px solid white",
-              padding: "5px 10px",
-            }}
+
+          <Link to="/form" style={{ textDecoration: "none", color: "inherit" }}>
+            <li className="nav-profile-item">
+              <AddOutlinedIcon fontSize="large" />
+            </li>
+          </Link>
+
+          <Link
+            to="/explore"
+            style={{ textDecoration: "none", color: "inherit" }}
           >
-            <Link
-              to="/form"
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              create
-            </Link>
-          </div>
-          <button onClick={logoutHandler}>logout</button>
-        </div>
+            <li className="nav-profile-item">
+              <ExploreOutlinedIcon fontSize="large" />
+            </li>
+          </Link>
+          <Link
+            to="/saved"
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            <li className="nav-profile-item">
+              <BookmarkBorderOutlinedIcon fontSize="large" />
+            </li>
+          </Link>
+        </ul>
       ) : (
         <div>
           <Link
