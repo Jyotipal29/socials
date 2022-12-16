@@ -50,7 +50,7 @@ const Home = () => {
   };
   useEffect(() => {
     getUser();
-  }, [user]);
+  }, []);
   return (
     <div className="home-container">
       {posts.map((item) => (
