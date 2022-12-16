@@ -37,7 +37,7 @@ const Home = () => {
   const getUser = async () => {
     const config = {
       headers: {
-        Authorization: `Bearer ${user.token}`,
+        Authorization: `Bearer ${token}`,
       },
     };
     console.log(config);
