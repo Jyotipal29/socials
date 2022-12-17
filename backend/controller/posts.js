@@ -6,6 +6,9 @@ const mongoose = require("mongoose");
 const createPost = async (req, res) => {
   const { caption, tags, picturePath } = req.body;
   console.log({ caption, tags, picturePath }, "post");
+  if (!picturePath) {
+    return res.status(400).json({ message: "picture path required" });
+  }
   const newPost = new Post({
     caption,
     tags,
@@ -16,8 +19,7 @@ const createPost = async (req, res) => {
     await newPost.save();
     res.status(201).json(newPost);
   } catch (error) {
-    res.status(409);
-    throw new Error(error);
+    res.status(400).json({ message: error.message });
   }
 };
 
@@ -27,8 +29,7 @@ const getFeedPosts = async (req, res) => {
     const post = await Post.find().populate("postedBy", "_id name picturePath");
     res.status(200).json(post);
   } catch (error) {
-    res.status(404);
-    throw new Error(error);
+    res.status(404).json({ message: error.message });
   }
 };
 
@@ -57,8 +58,7 @@ const getMyFollowingPosts = async (req, res) => {
 
     res.status(200).json(allPosts);
   } catch (error) {
-    res.status(404);
-    throw new Error(error);
+    res.status(404).json({ message: error.message });
   }
 };
 
@@ -71,9 +71,7 @@ const getMyPosts = async (req, res) => {
     );
     res.status(200).json(post);
   } catch (error) {
-    res.status(404);
-
-    throw new Error({ message: err.message });
+    res.status(404).json({ message: error.message });
   }
 };
 
@@ -108,8 +106,7 @@ const likePost = async (req, res) => {
 
     res.status(200).json(updatedPost);
   } catch (error) {
-    res.status(404);
-    throw new Error(error);
+    res.status(404).json({ message: error.message });
   }
 };
 
@@ -131,8 +128,7 @@ const commentInPost = async (req, res) => {
     .populate("comments.postedBy", "_id name")
     .exec((error, result) => {
       if (error) {
-        res.status(422);
-        throw new Error(error);
+        res.status(422).json({ message: error.message });
       } else {
         res.json(result);
       }

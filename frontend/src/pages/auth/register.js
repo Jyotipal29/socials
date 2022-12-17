@@ -77,10 +77,13 @@ const Register = () => {
 
       navigate("/");
     } catch (error) {
-      console.log(error.response.data, "error");
-      toast.error("something went wrong");
+      let errorMessage =
+        error?.response?.data?.message || "Something went wrong";
 
-      // setError(error.response.data.error);
+      console.log(errorMessage, "error");
+      toast.error(errorMessage);
+
+      setError(errorMessage);
       setTimeout(() => {
         setError("");
       }, 5000);

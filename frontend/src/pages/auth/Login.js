@@ -43,12 +43,13 @@ const SignIn = () => {
 
       navigate("/");
     } catch (error) {
-      // setError(error.r);
+      setError(error.response.data.message);
+
       setTimeout(() => {
         setError("");
       }, 5000);
-      console.log(error);
-      toast.error("something went wrong");
+      console.log(error.response.data.message);
+      toast.error(error.response.data.message);
     }
   };
   return (
@@ -58,7 +59,7 @@ const SignIn = () => {
           <h2 className="auth-heading">Sign In</h2>
           {error && <span className="error-message">{error}</span>}
           <div className="auth-form-control">
-            <smal>email</smal>
+            <small>email</small>
             <input
               placeholder="email"
               onChange={(e) => setEmail(e.target.value)}

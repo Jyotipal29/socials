@@ -19,8 +19,7 @@ const toggleSavePost = async (req, res) => {
     let usersaved = await user.save();
     res.status(200).json(usersaved);
   } catch (error) {
-    res.status(500);
-    throw new Error(error);
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -39,8 +38,7 @@ const getSavedPosts = async (req, res) => {
       .exec();
     res.status(200).json(user.savedPosts);
   } catch (error) {
-    res.status(500);
-    throw new Error(error);
+    res.status(500).json({ message: error.message });
   }
 };
 
