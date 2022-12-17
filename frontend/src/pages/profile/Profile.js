@@ -18,6 +18,9 @@ const Profile = () => {
     setIsAuth,
   } = useUser();
 
+
+
+  console.log(user, "user in profile");
   // useEffect(() => {
   //   const data = localStorage.getItem("user");
   //   console.log("--------");

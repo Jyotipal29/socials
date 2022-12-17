@@ -67,6 +67,7 @@ const Register = () => {
       const token = data.token;
       if (data) {
         userDispatch({ type: "REGISTER", payload: data });
+        console.log("user data", data);
         localStorage.setItem("user", JSON.stringify(data));
         localStorage.setItem("isAuth", true);
         localStorage.setItem("token", token);
