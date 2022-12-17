@@ -125,7 +125,7 @@ const Form = () => {
                   : "white",
               }}
             >
-              Submit
+              Create
             </button>
             {/* <button className="form-btn btn-clear" onClick={clearHandler}>
               clear
