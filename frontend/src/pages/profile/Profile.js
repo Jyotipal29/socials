@@ -3,12 +3,16 @@ import "./profile.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useUser } from "../../context/userContext/context";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { api } from "../../constants/api";
+import FadeLoader from "react-spinners/FadeLoader";
+
 const Profile = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   const {
     userState: { user },
     userDispatch,
@@ -18,27 +22,13 @@ const Profile = () => {
     setIsAuth,
   } = useUser();
 
-
-
   console.log(user, "user in profile");
-  // useEffect(() => {
-  //   const data = localStorage.getItem("user");
-  //   console.log("--------");
-
-  //   console.log(data);
-  //   console.log("--------");
-  //   console.log(user);
-  //   console.log("====");
-  //   userDispatch({
-  //     type: "UPDATE",
-  //     payload: data,
-  //   });
-  // }, []);
 
   useEffect(() => {
     getMyPost();
   }, [user]);
   const getMyPost = async () => {
+    setLoading(true);
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -46,6 +36,7 @@ const Profile = () => {
     };
     const { data } = await axios.get(`${api}post/mypost`, config);
     setData(data);
+    setLoading(false);
   };
   const logoutHandler = () => {
     userDispatch({ type: "LOGOUT" });
@@ -73,17 +64,41 @@ const Profile = () => {
         <button className="profile-logout-btn" onClick={logoutHandler}>
           logout
         </button>
-        <button className="profile-edit-btn">edit</button>
-      </div>
 
-      <div className="profile-gallary">
-        {data.map(
-          (item) =>
-            item.picturePath.includes("/") && (
-              <img src={item.picturePath} className="item" />
-            )
-        )}
+        <button className="profile-edit-btn">
+          <Link
+            to={`/profile/edit/${user?._id}`}
+            style={{ color: "inherit", textDecoration: "none" }}
+          >
+            edit
+          </Link>
+        </button>
       </div>
+      {loading ? (
+        <div className="loader-profile">
+          <FadeLoader
+            color="blue"
+            height={100}
+            speedMultiplier={2}
+            width={1}
+            margin={50}
+            loading={loading}
+          />
+        </div>
+      ) : (
+        <>
+          <div className="profile-gallary">
+            {data.map(
+              (item) =>
+                item.picturePath.includes("/") && (
+                  <Link to={`/sp/${item._id}`}>
+                    <img src={item.picturePath} className="item" />
+                  </Link>
+                )
+            )}
+          </div>
+        </>
+      )}
       <ToastContainer />
     </div>
   );

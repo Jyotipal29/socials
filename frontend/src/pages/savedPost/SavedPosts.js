@@ -1,31 +1,27 @@
 import React, { useEffect, useState } from "react";
 import "./SavedPosts.css";
-import { Link } from "react-router-dom";
+import FadeLoader from "react-spinners/FadeLoader";
 import { useUser } from "../../context/userContext/context";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { api } from "../../constants/api";
 import { usePost } from "../../context/postContext/context";
 import Post from "../post/Post";
 
 const SavedPosts = () => {
-  const [data, setData] = useState([]);
-  // console.log(data, "actual data");
+  const [loading, setLoading] = useState(false);
+
   const {
-    postState: { SavedPosts },
+    postState: { savedPost },
     postDispatch,
   } = usePost();
-  const {
-    userState: { user },
-    userDispatch,
-    token,
-  } = useUser();
+  const { token } = useUser();
 
   useEffect(() => {
     getAllSavedPost();
   }, []);
 
   const getAllSavedPost = async () => {
+    setLoading(true);
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -33,15 +29,26 @@ const SavedPosts = () => {
     };
 
     const { data } = await axios.get(`${api}save/savedPosts`, config);
-    console.log(data, "saved data coming");
-    setData(data);
+    postDispatch({ type: "SAVE", payload: data });
+    setLoading(false);
   };
 
   return (
     <div className="saved-container">
-      {data.map((item) => (
-        <Post item={item} />
-      ))}
+      {loading ? (
+        <div className="loader">
+          <FadeLoader
+            color="blue"
+            height={100}
+            speedMultiplier={2}
+            width={1}
+            margin={50}
+            loading={loading}
+          />
+        </div>
+      ) : (
+        savedPost && savedPost?.map((item) => <Post item={item} />)
+      )}
     </div>
   );
 };

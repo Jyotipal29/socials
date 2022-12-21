@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useUser } from "../../context/userContext/context";
 import "./home.css";
 import { api } from "../../constants/api";
@@ -6,7 +6,10 @@ import axios from "axios";
 import Post from "../post/Post";
 import Sidenav from "../sidenav/Sidenav";
 import { usePost } from "../../context/postContext/context";
+import FadeLoader from "react-spinners/FadeLoader";
+
 const Home = () => {
+  const [loading, setLoading] = useState(false);
   const {
     userState: { user },
     userDispatch,
@@ -22,6 +25,7 @@ const Home = () => {
   }, []);
 
   const getAllFeedPosts = async () => {
+    setLoading(true);
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -33,6 +37,7 @@ const Home = () => {
       type: "GET_POSTS",
       payload: data,
     });
+    setLoading(false);
   };
   const getUser = async () => {
     const config = {
@@ -53,9 +58,20 @@ const Home = () => {
   }, []);
   return (
     <div className="home-container">
-      {posts.map((item) => (
-        <Post item={item} />
-      ))}
+      {loading ? (
+        <div className="loader">
+          <FadeLoader
+            color="blue"
+            height={100}
+            speedMultiplier={2}
+            width={1}
+            margin={50}
+            loading={loading}
+          />
+        </div>
+      ) : (
+        posts.map((item) => <Post item={item} />)
+      )}
     </div>
   );
 };

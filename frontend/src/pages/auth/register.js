@@ -4,8 +4,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { api } from "../../constants/api";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../../context/userContext/context";
+import ClipLoader from "react-spinners/ClipLoader";
 import axios from "axios";
-import FileBase from "react-file-base64";
 import "./auth.css";
 const Register = () => {
   const [image, setImage] = useState(" ");
@@ -130,8 +130,17 @@ const Register = () => {
             <input className="pic-input" type="file" onChange={imgHandler} />
           </div>
 
-          <button onClick={registerHandler} className="auth-btn">
-            Sign up
+          <button
+            onClick={registerHandler}
+            className="auth-btn"
+            disabled={formData.picturePath.includes("/") ? false : true}
+            style={{
+              backgroundColor: formData.picturePath.includes("/")
+                ? "blue"
+                : "#eee",
+            }}
+          >
+            sign up
           </button>
           <button className="auth-btn-sec login">
             <Link to="/login"> already have an account ? login</Link>

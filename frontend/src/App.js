@@ -9,23 +9,29 @@ import OtherProfile from "./pages/otherProfile/OtherProfile";
 import Explore from "./pages/explore/Explore";
 import Sidenav from "./pages/sidenav/Sidenav";
 import SavedPosts from "./pages/savedPost/SavedPosts";
+import PrivateRoutes from "./utils/PrivateRoutes";
+import Profileedit from "./pages/auth/Profileedit";
+import Singlepost from "./pages/singlepost/Singlepost";
 function App() {
   return (
     <div className="App">
       <Router>
         <Navbar />
-        {/* <Sidenav /> */}
         <Routes>
-          <Route exact path="/" element={<Home />} />
+          <Route element={<PrivateRoutes />}>
+            <Route exact path="/" element={<Home />} />
+            <Route exact path="/form" element={<Form />} />
+            <Route exact path="/sp/:id" element={<Singlepost />} />
+            <Route exact path="/profile" element={<Profile />} />
+            <Route exact path="/profile/:id" element={<OtherProfile />} />
+            <Route exact path="/profile/edit/:id" element={<Profileedit />} />
+            <Route exact path="/explore" element={<Explore />} />
+            <Route exact path="/saved" element={<SavedPosts />} />
+          </Route>
 
           <Route exact path="/login" element={<Login />} />
 
           <Route exact path="/register" element={<Register />} />
-          <Route exact path="/form" element={<Form />} />
-          <Route exact path="/profile" element={<Profile />} />
-          <Route exact path="/profile/:id" element={<OtherProfile />} />
-          <Route exact path="/explore" element={<Explore />} />
-          <Route exact path="/saved" element={<SavedPosts />} />
         </Routes>
       </Router>
     </div>

@@ -8,7 +8,9 @@ import { usePost } from "../../context/postContext/context";
 import { useUser } from "../../context/userContext/context";
 import axios from "axios";
 import { api } from "../../constants/api";
+import { useNavigate } from "react-router-dom";
 const Form = () => {
+  const navigate = useNavigate();
   const [image, setImage] = useState(" ");
   const [urlM, setUrl] = useState(" ");
 
@@ -70,6 +72,7 @@ const Form = () => {
         picturePath: " ",
       });
       toast.success("post created");
+      navigate("/");
     } catch (error) {
       console.log(error.response.data.error);
       toast.error(error.response.data.error);

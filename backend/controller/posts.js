@@ -23,6 +23,25 @@ const createPost = async (req, res) => {
   }
 };
 
+// get one post
+
+const getPostById = async (req, res) => {
+  const id = req.params.id;
+  const post = await Post.findById(id);
+  if (post) {
+    res.json(post);
+  } else {
+    res.status(404).json({ message: "post not found" });
+  }
+  return res.json(post);
+};
+
+
+
+
+
+
+
 // /* READ */ all posts
 const getFeedPosts = async (req, res) => {
   try {
@@ -137,6 +156,7 @@ const commentInPost = async (req, res) => {
 
 module.exports = {
   createPost,
+  getPostById,
   getFeedPosts,
   getMyPosts,
   likePost,

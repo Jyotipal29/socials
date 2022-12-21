@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import FadeLoader from "react-spinners/FadeLoader";
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
 import ModeCommentOutlinedIcon from "@mui/icons-material/ModeCommentOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
@@ -11,6 +12,8 @@ import axios from "axios";
 import "./explore.css";
 
 const Explore = () => {
+  const [loading, setLoading] = useState(false);
+
   const {
     postState: { posts },
     postDispatch,
@@ -28,6 +31,7 @@ const Explore = () => {
   }, []);
 
   const getAllFeedPosts = async () => {
+    setLoading(true);
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -39,13 +43,25 @@ const Explore = () => {
       type: "GET_POSTS",
       payload: data,
     });
+    setLoading(false);
   };
 
   return (
     <div className="explore-container">
-      {posts.map((item) => (
-        <Post item={item} />
-      ))}
+      {loading ? (
+        <div className="loader">
+          <FadeLoader
+            color="blue"
+            height={100}
+            speedMultiplier={2}
+            width={1}
+            margin={50}
+            loading={loading}
+          />
+        </div>
+      ) : (
+        posts.map((item) => <Post item={item} />)
+      )}
     </div>
   );
 };

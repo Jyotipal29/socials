@@ -20,6 +20,23 @@ const postReducer = (postState, action) => {
           it._id === action.payload._id ? action.payload : it
         ),
       };
+    case "SAVE":
+      return {
+        ...postState,
+        savedPost: action.payload,
+      };
+    case "ADD_SAVE":
+      return {
+        ...postState,
+        savedPost: [...postState.savedPost, action.payload],
+      };
+    case "REMOVE_SAVE":
+      return {
+        ...postState,
+        savedPost: postState?.savedPost?.filter(
+          (it) => it._id !== action.payload._id
+        ),
+      };
     default:
       return postState;
     // case "FETCH_ALL":

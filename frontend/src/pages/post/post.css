@@ -54,6 +54,15 @@ padding-bottom: 15px;
 .btn{
     border:none;
     background-color: transparent;
+    cursor: pointer;
+}
+.post-like-btn{
+    display: flex;
+    align-items: center;
+}
+.post-like-btn small{
+    font-size: 14px;
+    text-transform: uppercase;
 }
 
 @media  (max-width:600px) {

@@ -13,26 +13,28 @@ const getUser = async (req, res) => {
   }
 };
 
-//get other user profile
+//  update profile
 
-// const getOtherUser = async (req, res) => {
-//   User.findOne({ _id: req.params.id })
-//     .select("-password")
-//     .then((user) => {
-//       Post.find({ postedBy: req.params.id })
-//         .populate("postedBy", "_id name picturePath")
-//         .exec((err, posts) => {
-//           if (err) {
-//             return res.status(422).json({ error: err });
-//           } else {
-//             res.json({ user, posts });
-//           }
-//         })
-//         .catch((err) => {
-//           return res.status(404).json({ error: "user not found" });
-//         });
-//     });
-// };
+
+const updateUser = async (req, res) => {
+  const { id } = req.params;
+  try {
+
+    const updatedUser = await User.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+    res.status(200).json( updatedUser);
+  } catch (error) {
+    res.status(401).json({message:error.message})
+  }
+
+  
+  
+  
+ 
+  
+}
+
 
 const getOtherUser = async (req, res) => {
   try {
@@ -50,31 +52,7 @@ const getOtherUser = async (req, res) => {
   }
 };
 
-// const getUserFriends = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const user = await User.findById(id);
 
-//     const friends = await Promise.all(
-//       user.friends.map((id) => User.findById(id))
-//     );
-//     const formattedFriends = friends.map(
-//       ({ _id, firstName, lastName, occupation, location, picturePath }) => {
-//         return {
-//           _id,
-//           firstName,
-//           lastName,
-//           occupation,
-//           location,
-//           picturePath,
-//         };
-//       }
-//     );
-//     res.status(200).json(formattedFriends);
-//   } catch (error) {
-//     res.status(404).json({ message: error.message });
-//   }
-// };
 
 // follow
 
@@ -123,6 +101,7 @@ const unfollow = async (req, res) => {
 
 module.exports = {
   getUser,
+  updateUser,
   getOtherUser,
   follow,
   unfollow,
