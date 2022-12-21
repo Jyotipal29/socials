@@ -12,6 +12,11 @@ const postReducer = (postState, action) => {
         ...postState,
         post: [action.payload],
       };
+    case "UPDATE_POST":
+      return {
+        ...postState,
+        post: [action.payload],
+      };
     case "CREATE_POST":
       return {
         ...postState,

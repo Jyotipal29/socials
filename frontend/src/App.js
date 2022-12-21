@@ -12,6 +12,7 @@ import SavedPosts from "./pages/savedPost/SavedPosts";
 import PrivateRoutes from "./utils/PrivateRoutes";
 import Profileedit from "./pages/auth/Profileedit";
 import Singlepost from "./pages/singlepost/Singlepost";
+import EditForm from "./pages/form/EditForm";
 function App() {
   return (
     <div className="App">
@@ -25,6 +26,7 @@ function App() {
             <Route exact path="/profile" element={<Profile />} />
             <Route exact path="/profile/:id" element={<OtherProfile />} />
             <Route exact path="/profile/edit/:id" element={<Profileedit />} />
+            <Route exact path="/edit/:id" element={<EditForm />} />
             <Route exact path="/explore" element={<Explore />} />
             <Route exact path="/saved" element={<SavedPosts />} />
           </Route>

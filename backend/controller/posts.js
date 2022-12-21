@@ -174,6 +174,29 @@ const postById = async (req, res) => {
   }
 };
 
+
+const deletePost = async (req, res) => {
+  const { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id))
+    return res.status(404).send("no video with the id");
+  const post = await Post.findById(id);
+  await post.remove();
+  res.status(201).json({ message: "post deleted" });
+};
+
+const updatPost = async (req, res) => {
+  const { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id))
+    return res.status(404).send("no post with the id");
+  try {
+    const updatedPost = await Post.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+    res.status(200).json(updatedPost);
+  } catch (error) {
+    res.status(401).json({ message: error.message });
+  }
+};
 module.exports = {
   createPost,
   getFeedPosts,
@@ -182,4 +205,6 @@ module.exports = {
   commentInPost,
   getMyFollowingPosts,
   postById,
+  deletePost,
+  updatPost,
 };

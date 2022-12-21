@@ -15,14 +15,7 @@ const Profileedit = () => {
   });
   const [error, setError] = useState(" ");
   const navigate = useNavigate();
-  const {
-    userState: { user },
-    userDispatch,
-    token,
-    setToken,
-    isAuth,
-    setIsAuth,
-  } = useUser();
+  const { userState, userDispatch, token } = useUser();
   const imgHandler = (e) => {
     e.preventDefault();
     const data = new FormData();

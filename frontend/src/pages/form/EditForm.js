@@ -1,37 +1,32 @@
-import React, { useEffect } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import "./form.css";
-import { useState } from "react";
-import FileBase from "react-file-base64";
-import { usePost } from "../../context/postContext/context";
+import React from "react";
+import { useState, useEffect } from "react";
 import { useUser } from "../../context/userContext/context";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { api } from "../../constants/api";
-import { useNavigate } from "react-router-dom";
-const Form = () => {
+import { usePost } from "../../context/postContext/context";
+const EditForm = () => {
   const navigate = useNavigate();
-  const [image, setImage] = useState(" ");
+  const params = useParams();
+  const id = params.id;
+  console.log(id, "user id");
   const [urlM, setUrl] = useState(" ");
-
-  useEffect(() => {
-    setPostData({ ...postData, picturePath: urlM });
-  }, [urlM]);
-  const {
-    postState: { posts },
-    postDispatch,
-  } = usePost();
-  console.log(posts, "posts");
-  const {
-    userState: { user },
-    token,
-  } = useUser();
   const [postData, setPostData] = useState({
     caption: "",
     tags: "",
     picturePath: "",
   });
-
+  const {
+    userState: { user },
+    token,
+  } = useUser();
+  const {
+    postState: { post },
+    postDispatch,
+  } = usePost();
+  useEffect(() => {
+    setPostData({ ...postData, picturePath: urlM });
+  }, [urlM]);
   const changeHandler = (e) => {
     const dataM = new FormData();
     dataM.append("file", e.target.files[0]);
@@ -52,37 +47,40 @@ const Form = () => {
     console.log(urlM, "url");
   };
 
-  const submitHandler = async (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    getData();
+  }, []);
 
-    console.log(postData, "postdata 27");
+  const getData = async () => {
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     };
-
-    try {
-      const { data } = await axios.post(`${api}post/`, postData, config);
-      console.log(data, "post data 35");
-      postDispatch({ type: "CREATE_POST", payload: data });
-      setPostData({
-        caption: " ",
-        tags: "",
-        picturePath: " ",
-      });
-      toast.success("post created");
-      navigate("/");
-    } catch (error) {
-      console.log(error.response.data.error);
-      toast.error(error.response.data.error);
-    }
+    const { data } = await axios.get(`${api}post/${id}`, config);
+    setPostData({
+      caption: data.caption,
+      tags: data.tags,
+    });
+    console.log(data, "post data");
+  };
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const { data } = await axios.put(`${api}post/${id}`, postData, config);
+    console.log(data, "updated post data");
+    postDispatch({ type: "UPDATE_POST", payload: data });
+    navigate(`/sp/${id}`);
   };
   return (
     <div className="create-form-container">
       <div className="create-form-wrapper">
         <form className="create-form" onSubmit={submitHandler}>
-          <h2 className="form-heading">Create Post</h2>
+          <h2 className="form-heading"> Edit Post</h2>
 
           <div className="form-control">
             <label>caption</label>
@@ -120,25 +118,20 @@ const Form = () => {
             <button
               type="submit"
               className="form-btn btn-submit"
-              disabled={postData.picturePath.includes("/") ? false : true}
+              disabled={postData?.picturePath?.includes("/") ? false : true}
               style={{
-                backgroundColor: postData.picturePath.includes("/")
+                backgroundColor: postData?.picturePath?.includes("/")
                   ? "blue"
-                  : "white",
+                  : "#eee",
               }}
             >
-              Create
+              update
             </button>
-            {/* <button className="form-btn btn-clear" onClick={clearHandler}>
-              clear
-            </button> */}
           </div>
         </form>
       </div>
-
-      <ToastContainer />
     </div>
   );
 };
 
-export default Form;
+export default EditForm;

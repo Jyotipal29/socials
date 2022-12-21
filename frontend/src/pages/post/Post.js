@@ -1,20 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./post.css";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ClipLoader from "react-spinners/ClipLoader";
-
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
 import ModeCommentOutlinedIcon from "@mui/icons-material/ModeCommentOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import { usePost } from "../../context/postContext/context";
-import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useUser } from "../../context/userContext/context";
 import { api } from "../../constants/api";
+import Model from "../../components/model/Model";
 const Post = (item) => {
-  console.log(item, "all the value");
+  const [showMore, setShowMore] = useState(false);
   const {
     postState: { savedPost },
     postDispatch,
@@ -129,29 +128,53 @@ const Post = (item) => {
     setIsSaved((prev) => !prev);
     setSaveState({ isLoading: false, id: null });
   };
+
+  const showHandler = () => {
+    setShowMore((prev) => !prev);
+  };
+
   return (
     <div className="feed-post-container">
       <div className="post-card">
-        <Link
-          to={
-            item?.item?.postedBy?._id !== user._id
-              ? `/profile/${item?.item?.postedBy?._id}`
-              : "/profile"
-          }
-          style={{
-            textDecoration: "none",
-            color: "inherit",
-          }}
-        >
-          <div className="post-profile-details">
-            <img src={item?.item?.postedBy?.picturePath} />
-            <p className="post-user-name">{item?.item?.postedBy?.name}</p>
+        <div className="post-profile-details">
+          <Link
+            to={
+              item?.item?.postedBy?._id !== user._id
+                ? `/profile/${item?.item?.postedBy?._id}`
+                : "/profile"
+            }
+            style={{
+              textDecoration: "none",
+              color: "inherit",
+            }}
+          >
+            <div className="post-profile">
+              <img src={item?.item?.postedBy?.picturePath} alt="" />
+              <p className="post-user-name">{item?.item?.postedBy?.name}</p>
+            </div>
+          </Link>
+
+          <div>
+            {item?.item?.postedBy?._id === user._id && (
+              <>
+                <button className="more-btn" onClick={showHandler}>
+                  <MoreVertIcon />
+                </button>
+                {showMore && (
+                  <Model
+                    id={item?.item?._id}
+                    showMore={showMore}
+                    setShowMore={setShowMore}
+                  />
+                )}
+              </>
+            )}
           </div>
-        </Link>
+        </div>
 
         <div className="post-details">
           <Link to={`/sp/${item?.item?._id}`}>
-            <img src={item?.item?.picturePath} />
+            <img src={item?.item?.picturePath} alt="" />
           </Link>
           <small className="post-caption">
             <strong style={{ color: "#0f172a" }}>
@@ -237,7 +260,6 @@ const Post = (item) => {
           )}
         </div>
       </div>
-      <ToastContainer />
     </div>
   );
 };
