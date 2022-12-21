@@ -5,9 +5,18 @@ const mongoose = require("mongoose");
 /* CREATE */
 const createPost = async (req, res) => {
   const { caption, tags, picturePath } = req.body;
-  console.log({ caption, tags, picturePath }, "post");
+  console.log(
+    {
+      caption,
+      tags,
+      picturePath,
+    },
+    "post"
+  );
   if (!picturePath) {
-    return res.status(400).json({ message: "picture path required" });
+    return res.status(400).json({
+      message: "picture path required",
+    });
   }
   const newPost = new Post({
     caption,
@@ -19,28 +28,11 @@ const createPost = async (req, res) => {
     await newPost.save();
     res.status(201).json(newPost);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(400).json({
+      message: error.message,
+    });
   }
 };
-
-// get one post
-
-const getPostById = async (req, res) => {
-  const id = req.params.id;
-  const post = await Post.findById(id);
-  if (post) {
-    res.json(post);
-  } else {
-    res.status(404).json({ message: "post not found" });
-  }
-  return res.json(post);
-};
-
-
-
-
-
-
 
 // /* READ */ all posts
 const getFeedPosts = async (req, res) => {
@@ -48,7 +40,9 @@ const getFeedPosts = async (req, res) => {
     const post = await Post.find().populate("postedBy", "_id name picturePath");
     res.status(200).json(post);
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(404).json({
+      message: error.message,
+    });
   }
 };
 
@@ -56,41 +50,41 @@ const getFeedPosts = async (req, res) => {
 const getMyFollowingPosts = async (req, res) => {
   try {
     const followingPosts = await Post.find({
-      postedBy: { $in: req.user.following },
+      postedBy: {
+        $in: req.user.following,
+      },
     })
-      .populate("postedBy", "_id name picturePath")
-      .sort("-createdAt");
-
-    const posts = await Post.find({ postedBy: req.user._id }).populate(
-      "postedBy",
-      "_id name picturePath"
-    );
-
+      .populate("postedBy", " _id name picturePath")
+      .sort("createdAt");
+    const posts = await Post.find({
+      postedBy: req.user._id,
+    }).populate("postedBy", " _id name picturePath");
     let allPosts = [];
     followingPosts.forEach((post) => {
       allPosts.push(post);
     });
-
     posts.forEach((post) => {
       allPosts.push(post);
     });
-
     res.status(200).json(allPosts);
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(404).json({
+      message: error.message,
+    });
   }
 };
 
 const getMyPosts = async (req, res) => {
   try {
     // const { userId } = req.params;
-    const post = await Post.find({ postedBy: req.user._id }).populate(
-      "postedBy",
-      "_id name picturePath"
-    );
+    const post = await Post.find({
+      postedBy: req.user._id,
+    }).populate("postedBy", "_id name picturePath");
     res.status(200).json(post);
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(404).json({
+      message: error.message,
+    });
   }
 };
 
@@ -98,7 +92,10 @@ const getMyPosts = async (req, res) => {
 const likePost = async (req, res) => {
   try {
     const { id } = req.params;
-    if (!req.user.id) return res.json({ message: "Unauthenticated" });
+    if (!req.user.id)
+      return res.json({
+        message: "Unauthenticated",
+      });
     if (!mongoose.Types.ObjectId.isValid(id))
       return res.status(404).send("no post with that id");
     // const { userId } = req.body;
@@ -125,7 +122,9 @@ const likePost = async (req, res) => {
 
     res.status(200).json(updatedPost);
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(404).json({
+      message: error.message,
+    });
   }
 };
 
@@ -138,7 +137,9 @@ const commentInPost = async (req, res) => {
   Post.findByIdAndUpdate(
     req.body.postId,
     {
-      $push: { comments: comment },
+      $push: {
+        comments: comment,
+      },
     },
     {
       new: true,
@@ -147,19 +148,38 @@ const commentInPost = async (req, res) => {
     .populate("comments.postedBy", "_id name")
     .exec((error, result) => {
       if (error) {
-        res.status(422).json({ message: error.message });
+        res.status(422).json({
+          message: error.message,
+        });
       } else {
         res.json(result);
       }
     });
 };
 
+// get one post by id
+
+const postById = async (req, res) => {
+  const { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id))
+    return res.status(404).send("no video with the id");
+  try {
+    const post = await Post.findById(id).populate(
+      "postedBy",
+      "_id name picturePath"
+    );
+    res.status(200).json(post);
+  } catch (error) {
+    res.status(400).josn({ message: error.message });
+  }
+};
+
 module.exports = {
   createPost,
-  getPostById,
   getFeedPosts,
   getMyPosts,
   likePost,
   commentInPost,
   getMyFollowingPosts,
+  postById,
 };

@@ -7,6 +7,11 @@ export const UserReducer = (userState, action) => {
         ...userState,
         user: action.payload,
       };
+    case "UPDATE_USER":
+      return {
+        ...userState,
+        user: action.payload,
+      };
     case "UPDATE":
       return {
         ...userState,

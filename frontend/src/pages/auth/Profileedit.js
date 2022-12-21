@@ -73,6 +73,10 @@ const Profileedit = () => {
       formData,
       config
     );
+    
+    userDispatch({ type: "UPDATE_USER", payload: data });
+    localStorage.setItem("user", JSON.stringify(data));
+    navigate("/profile");
     console.log(data, "updated data");
   };
 

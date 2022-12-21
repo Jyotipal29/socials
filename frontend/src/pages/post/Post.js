@@ -150,7 +150,9 @@ const Post = (item) => {
         </Link>
 
         <div className="post-details">
-          <img src={item?.item?.picturePath} />
+          <Link to={`/sp/${item?.item?._id}`}>
+            <img src={item?.item?.picturePath} />
+          </Link>
           <small className="post-caption">
             <strong style={{ color: "#0f172a" }}>
               {item?.item?.postedBy?.name}{" "}
