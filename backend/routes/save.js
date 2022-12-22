@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const saveController = require("../controller/save");
+const { toggleSavePost, getSavedPosts } = require("../controller/save");
 const { protect } = require("../middleware/auth");
 
-router.post("/toggleSavePost", protect, saveController.toggleSavePost);
-router.get("/savedPosts", protect, saveController.getSavedPosts);
+router.post("/toggleSavePost", protect, toggleSavePost);
+router.get("/savedPost", protect, getSavedPosts);
 module.exports = router;
+ 

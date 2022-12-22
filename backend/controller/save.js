@@ -4,10 +4,11 @@ const mongoose = require("mongoose");
 
 const toggleSavePost = async (req, res) => {
   try {
-    const userid = req.user.id;
+    const userid = req.user._id;
     const postid = req.body.postid;
-
+    console.log(postid);
     let user = await User.findById(userid).exec();
+    console.log(user);
     if (user.savedPosts.includes(postid)) {
       user.savedPosts = user.savedPosts.filter(
         (post) => post.toString() != postid.toString()
@@ -25,7 +26,9 @@ const toggleSavePost = async (req, res) => {
 
 const getSavedPosts = async (req, res) => {
   try {
-    const userid = req.user.id;
+    const userid = req.user._id;
+    console.log(userid, "saved posts");
+
     let user = await User.findById(userid)
       .populate("savedPosts")
       .populate({
@@ -36,6 +39,7 @@ const getSavedPosts = async (req, res) => {
         },
       })
       .exec();
+
     res.status(200).json(user.savedPosts);
   } catch (error) {
     res.status(500).json({ message: error.message });

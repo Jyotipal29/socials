@@ -92,7 +92,7 @@ const getMyPosts = async (req, res) => {
 const likePost = async (req, res) => {
   try {
     const { id } = req.params;
-    if (!req.user.id)
+    if (!req.user._id)
       return res.json({
         message: "Unauthenticated",
       });
@@ -102,17 +102,17 @@ const likePost = async (req, res) => {
     const post = await Post.findById(id);
     // const isLiked = post.likes.get(userId);
     const index = post.likes.findIndex(
-      (id) => id.toString() === req.user.id.toString()
+      (id) => id.toString() === req.user._id.toString()
     );
 
     if (index === -1) {
       //like
-      post.likes.push(req.user.id.toString());
+      post.likes.push(req.user._id.toString());
 
       // post.likes.delete(userId);
     } else {
       post.likes = post.likes.filter(
-        (id) => id.toString() != req.user.id.toString()
+        (id) => id.toString() != req.user._id.toString()
       );
     }
 

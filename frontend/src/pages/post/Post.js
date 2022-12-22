@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./post.css";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ClipLoader from "react-spinners/ClipLoader";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -18,7 +19,7 @@ const Post = (item) => {
     postState: { savedPost },
     postDispatch,
   } = usePost();
-
+  console.log(savedPost, "savedPost");
   const [isSaved, setIsSaved] = useState(
     savedPost?.some((it) => it._id === item?.item?._id)
   );
@@ -88,20 +89,6 @@ const Post = (item) => {
     }
   };
 
-  // delete handler
-  const deleteHandler = async (id) => {
-    // try {
-    //     const config = {
-    //       headers: {
-    //         Authorization: `Bearer ${token}`,
-    //       },
-    //   };
-    //   await axios.delete(`${api}`)
-    // } catch (error) {
-    //   console.log(error);
-    // }
-  };
-
   // save handler
 
   const saveHandler = async (id) => {
@@ -117,7 +104,7 @@ const Post = (item) => {
       { postid: id },
       config
     );
-    const { data } = await axios.get(`${api}save/savedPosts`, config);
+    const { data } = await axios.get(`${api}save/savedPost`, config);
 
     isSaved
       ? postDispatch({ type: "SAVE", payload: data })
@@ -127,6 +114,25 @@ const Post = (item) => {
         });
     setIsSaved((prev) => !prev);
     setSaveState({ isLoading: false, id: null });
+  };
+
+  useEffect(() => {
+    getAllSavedPost();
+  }, []);
+
+  const getAllSavedPost = async () => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const { data } = await axios.get(`${api}save/savedPost`, config);
+      postDispatch({ type: "SAVE", payload: data });
+    } catch (error) {
+      console.log(error, "error");
+    }
   };
 
   const showHandler = () => {
@@ -233,7 +239,9 @@ const Post = (item) => {
               <>
                 <BookmarkBorderOutlinedIcon
                   style={{
-                    color: savedPost?.some((it) => it._id === item?.item?._id)
+                    color: savedPost?.some(
+                      (item) => item._id === item?.item?._id
+                    )
                       ? "blue"
                       : "inherit",
                   }}
@@ -260,6 +268,7 @@ const Post = (item) => {
           )}
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

@@ -16,21 +16,28 @@ const SavedPosts = () => {
   } = usePost();
   const { token } = useUser();
 
+  console.log(savedPost, "savedPost");
+  useEffect(() => {}, []);
+
   useEffect(() => {
     getAllSavedPost();
   }, []);
 
   const getAllSavedPost = async () => {
     setLoading(true);
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
 
-    const { data } = await axios.get(`${api}save/savedPosts`, config);
-    postDispatch({ type: "SAVE", payload: data });
-    setLoading(false);
+      const { data } = await axios.get(`${api}save/savedPost`, config);
+      postDispatch({ type: "SAVE", payload: data });
+      setLoading(false);
+    } catch (error) {
+      console.log(error, "error");
+    }
   };
 
   return (
