@@ -12,7 +12,8 @@ import axios from "axios";
 import { useUser } from "../../context/userContext/context";
 import { api } from "../../constants/api";
 import Model from "../../components/model/Model";
-const Post = (item) => {
+const Post = ({ item }) => {
+  console.log(item, "item");
   const [showMore, setShowMore] = useState(false);
   const {
     postState: { savedPost },
@@ -87,25 +88,6 @@ const Post = (item) => {
     setSaveState({ isLoading: false, id: null });
   };
 
-  useEffect(() => {
-    getAllSavedPost();
-  }, []);
-
-  const getAllSavedPost = async () => {
-    try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
-      const { data } = await axios.get(`${api}save/savedPost`, config);
-      postDispatch({ type: "SAVE", payload: data });
-    } catch (error) {
-      console.log(error, "error");
-    }
-  };
-
   const showHandler = () => {
     setShowMore((prev) => !prev);
   };
@@ -116,8 +98,8 @@ const Post = (item) => {
         <div className="post-profile-details">
           <Link
             to={
-              item?.item?.postedBy?._id !== user._id
-                ? `/profile/${item?.item?.postedBy?._id}`
+              item?.postedBy?._id !== user._id
+                ? `/profile/${item?.postedBy?._id}`
                 : "/profile"
             }
             style={{
@@ -126,20 +108,20 @@ const Post = (item) => {
             }}
           >
             <div className="post-profile">
-              <img src={item?.item?.postedBy?.picturePath} alt="" />
-              <p className="post-user-name">{item?.item?.postedBy?.name}</p>
+              <img src={item?.postedBy?.picturePath} alt="" />
+              <p className="post-user-name">{item?.postedBy?.name}</p>
             </div>
           </Link>
 
           <div>
-            {item?.item?.postedBy?._id === user._id && (
+            {item?.postedBy?._id === user._id && (
               <>
                 <button className="more-btn" onClick={showHandler}>
                   <MoreVertIcon />
                 </button>
                 {showMore && (
                   <Model
-                    id={item?.item?._id}
+                    id={item?._id}
                     showMore={showMore}
                     setShowMore={setShowMore}
                   />
@@ -150,25 +132,25 @@ const Post = (item) => {
         </div>
 
         <div className="post-details">
-          <Link to={`/sp/${item?.item?._id}`}>
-            <img src={item?.item?.picturePath} alt="" />
+          <Link to={`/sp/${item?._id}`}>
+            <img src={item?.picturePath} alt="" />
           </Link>
           <small className="post-caption">
             <strong style={{ color: "#0f172a" }}>
-              {item?.item?.postedBy?.name}{" "}
+              {item?.postedBy?.name}{" "}
             </strong>
-            {item?.item?.caption}
+            {item?.caption}
           </small>
           <small className="post-tags">
-            {item?.item?.tags?.map((tag) => `#${tag} `)}
+            {item?.tags?.map((tag) => `#${tag} `)}
           </small>
         </div>
         <div className="post-btn">
           <button
             className="btn post-like-btn"
-            onClick={() => likeHandler(item?.item?._id)}
+            onClick={() => likeHandler(item?._id)}
           >
-            {likeState?.id === item?.item?._id && likeState?.isLoading ? (
+            {likeState?.id === item?._id && likeState?.isLoading ? (
               <ClipLoader
                 color="blue"
                 size={20}
@@ -179,15 +161,15 @@ const Post = (item) => {
               <>
                 <FavoriteBorderOutlinedIcon
                   style={{
-                    color: item?.item?.likes?.length > 0 ? "blue" : "inherit",
+                    color: item?.likes?.length > 0 ? "blue" : "inherit",
                   }}
                 />
                 <small
                   style={{
-                    color: item?.item?.likes?.length > 0 ? "blue" : "inherit",
+                    color: item?.likes?.length > 0 ? "blue" : "inherit",
                   }}
                 >
-                  like {item?.item?.likes?.length}
+                  like {item?.likes?.length}
                 </small>
               </>
             )}
@@ -195,9 +177,9 @@ const Post = (item) => {
 
           <button
             className="btn post-save-btn"
-            onClick={() => saveHandler(item?.item?._id)}
+            onClick={() => saveHandler(item?._id)}
           >
-            {saveState?.id === item?.item?._id && saveState?.isLoading ? (
+            {saveState?.id === item?._id && saveState?.isLoading ? (
               <ClipLoader
                 color="blue"
                 size={20}
@@ -206,15 +188,7 @@ const Post = (item) => {
               />
             ) : (
               <>
-                <BookmarkBorderOutlinedIcon
-                  style={{
-                    color: savedPost?.some(
-                      (item) => item._id === item?.item?._id
-                    )
-                      ? "blue"
-                      : "inherit",
-                  }}
-                />
+                <BookmarkBorderOutlinedIcon />
               </>
             )}
           </button>
