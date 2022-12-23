@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "./post.css";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ClipLoader from "react-spinners/ClipLoader";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
-import ModeCommentOutlinedIcon from "@mui/icons-material/ModeCommentOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import { usePost } from "../../context/postContext/context";
 import { Link } from "react-router-dom";
@@ -32,8 +31,6 @@ const Post = (item) => {
     id: null,
     isLoading: false,
   });
-  const [showComm, setShowComm] = useState(false);
-  const [commText, setCommText] = useState(" ");
 
   const {
     userState: { user },
@@ -58,32 +55,6 @@ const Post = (item) => {
         payload: data,
       });
       setLikeState({ isLoading: false, id: null });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  // comment
-  const commentClickHandler = () => {
-    setShowComm((prev) => !prev);
-  };
-
-  // commment
-  const commentHandler = async (postId) => {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
-    try {
-      const { data } = await axios.put(
-        `${api}post/comment`,
-        { postId, commText },
-        config
-      );
-      // console.log(data, "comment data");
-      setCommText(" ");
     } catch (error) {
       console.log(error);
     }
@@ -221,9 +192,7 @@ const Post = (item) => {
               </>
             )}
           </button>
-          <button className="btn post-comm-btn" onClick={commentClickHandler}>
-            <ModeCommentOutlinedIcon />
-          </button>
+
           <button
             className="btn post-save-btn"
             onClick={() => saveHandler(item?.item?._id)}
@@ -249,23 +218,6 @@ const Post = (item) => {
               </>
             )}
           </button>
-        </div>
-        <div>
-          {showComm && (
-            <>
-              <input
-                type="text"
-                value={commText}
-                onChange={(e) => setCommText(e.target.value)}
-              />
-              <button onClick={() => commentHandler(item.item._id)}>
-                comment
-              </button>
-              <div>
-                <span>{commText}</span>
-              </div>
-            </>
-          )}
         </div>
       </div>
       <ToastContainer />

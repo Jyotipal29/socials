@@ -59,11 +59,12 @@ const getOtherUser = async (req, res) => {
 const follow = async (req, res) => {
   try {
     let followerUser = await User.findById(req.body.followId).exec();
-    followerUser.followers.push(req.user.id);
+    console.log(followerUser, "followers");
+    followerUser.followers.push(req.user._id);
     followerUser.followers = [...new Set(followerUser.followers)];
     let res1 = await followerUser.save();
 
-    let user = await User.findById(req.user.id).exec();
+    let user = await User.findById(req.user._id).exec();
     user.following.push(req.body.followId);
     user.following = [...new Set(user.following)];
     let res2 = await user.save();
@@ -89,7 +90,8 @@ const unfollow = async (req, res) => {
   followerUser.followers = [...new Set(followerUser.followers)];
   let res1 = await followerUser.save();
 
-  let user = await User.findById(req.user.id).exec();
+  let user = await User.findById(req.user._id).exec();
+  console.log(user, "user to unfolow");
   user.following = user.following.filter(
     (user) => user.toString() != unfollowerUser.toString()
   );

@@ -14,11 +14,9 @@ const OtherProfile = () => {
     userState: { user },
     userDispatch,
     token,
-    setToken,
-    isAuth,
-    setIsAuth,
   } = useUser();
 
+  console.log(user, "user");
   useEffect(() => {
     getOtherUser();
   }, []);
@@ -36,8 +34,8 @@ const OtherProfile = () => {
   // follow
   // updating the value of 'showFollow'
   useEffect(() => {
-    user.following.forEach((followingUser) => {
-      if (followingUser == id) {
+    user?.following?.forEach((followingUser) => {
+      if (followingUser === id) {
         setShowFollow(false);
       }
     });
