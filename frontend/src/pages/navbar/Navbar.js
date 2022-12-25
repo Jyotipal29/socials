@@ -11,21 +11,8 @@ const Navbar = () => {
   const navigate = useNavigate();
   const {
     userState: { user },
-    userDispatch,
-    token,
-    setToken,
-    isAuth,
-    setIsAuth,
   } = useUser();
-  // const logoutHandler = () => {
-  //   userDispatch({ type: "LOGOUT" });
-  //   localStorage.removeItem("user");
-  //   localStorage.removeItem("token");
-  //   localStorage.removeItem("isAuth");
-  //   setIsAuth(false);
-  //   setToken(" ");
-  //   navigate("/login");
-  // };
+
   return (
     <div className="nav-header">
       <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
@@ -41,7 +28,7 @@ const Navbar = () => {
 
           <Link to="/form" style={{ textDecoration: "none", color: "inherit" }}>
             <li className="nav-profile-item">
-              <AddOutlinedIcon fontSize="large" />
+              <AddOutlinedIcon fontSize="large" color="white" />
             </li>
           </Link>
 

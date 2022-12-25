@@ -4,9 +4,9 @@
     left:0;
     top:0;
     width:100%;
-    z-index: 99999999999;
+    z-index: 10;
      box-shadow: 0 2px 4px -1px rgba(0,0,0,0.25); 
-    color:blue;
+    background-color:blue;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -16,6 +16,7 @@
     font-size: 30px;
     font-weight: bold;
     margin-left:30px;
+    color:white;
 }
 .nav-profile{
     display: flex;
@@ -27,6 +28,7 @@
 .nav-profile-item{
     margin-right:10px;
     font-weight: 700;
+    color:white;
 }
 .nav-user-img{
     width:40px;
