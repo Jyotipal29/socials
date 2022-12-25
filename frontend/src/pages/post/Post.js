@@ -3,6 +3,7 @@ import "./post.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ClipLoader from "react-spinners/ClipLoader";
+import ModeCommentOutlinedIcon from "@mui/icons-material/ModeCommentOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
@@ -15,6 +16,7 @@ import Model from "../../components/model/Model";
 const Post = ({ item }) => {
   // console.log(item, "item");
   const [showMore, setShowMore] = useState(false);
+  const [showComm, setShowComm] = useState(false);
   const [comm, setComm] = useState(item?.comments ?? []);
   const [likes, setLikes] = useState(item?.likes ?? []);
   const [savedPosts, setSavedPosts] = useState([]);
@@ -168,12 +170,12 @@ const Post = ({ item }) => {
           <small className="post-tags">
             {item?.tags?.map((tag) => `#${tag} `)}
           </small>
-          <h4 style={{ color: "#777" }}>comments</h4>
+          <small style={{ color: "#777" }}>comments</small>
           {comm.map((it) => (
-            <h6 key={it._id}>
+            <div key={it._id} className="post-comm">
               <strong>{item?.postedBy?.name}:</strong>
               {it.text}
-            </h6>
+            </div>
           ))}
         </div>
         <div className="post-btn">
@@ -205,14 +207,12 @@ const Post = ({ item }) => {
               </>
             )}
           </button>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              makeComment(e.target[0].value, item?._id);
-            }}
+          <button
+            className="btn post-like-btn"
+            onClick={() => setShowComm(!showComm)}
           >
-            <input />
-          </form>
+            <ModeCommentOutlinedIcon />
+          </button>
 
           <button
             className="btn post-save-btn"
@@ -231,6 +231,19 @@ const Post = ({ item }) => {
               </>
             )}
           </button>
+        </div>
+        <div>
+          {showComm && (
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                makeComment(e.target[0].value, item?._id);
+              }}
+            >
+              <input />
+              <button>comment</button>
+            </form>
+          )}
         </div>
       </div>
       <ToastContainer />

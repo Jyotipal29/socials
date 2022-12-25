@@ -66,6 +66,9 @@ padding-bottom: 15px;
     border-radius:10px;
 
 }
+.post-comm{
+    font-size: 16px;
+}
 .post-btn{
     display: flex;
     justify-content: space-between;
