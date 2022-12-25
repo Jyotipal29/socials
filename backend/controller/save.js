@@ -4,8 +4,18 @@ const mongoose = require("mongoose");
 
 const toggleSavePost = async (req, res) => {
   try {
-    const userid = req.user._id;
+    const userid = req.user.id;
     const postid = req.body.postid;
+
+    // Checking if the user already saved the video
+    const savedVideo = await Post.findOne({
+      saves: {
+        $in: userid,
+      },
+    });
+    if (savedVideo) {
+    } else {
+    }
     console.log(postid);
     let user = await User.findById(userid).exec();
     console.log(user);
@@ -26,7 +36,7 @@ const toggleSavePost = async (req, res) => {
 
 const getSavedPosts = async (req, res) => {
   try {
-    const userid = req.user._id;
+    const userid = req.user.id;
     console.log(userid, "saved posts");
 
     let user = await User.findById(userid)

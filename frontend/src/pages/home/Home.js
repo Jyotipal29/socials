@@ -10,6 +10,8 @@ import FadeLoader from "react-spinners/FadeLoader";
 
 const Home = () => {
   const [loading, setLoading] = useState(false);
+  const [_posts, setPosts] = useState([]);
+
   const {
     userState: { user },
     userDispatch,
@@ -26,18 +28,25 @@ const Home = () => {
 
   const getAllFeedPosts = async () => {
     setLoading(true);
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    const { data } = await axios.get(`${api}post/followingpost`, config);
-    console.log(data, "feed data");
-    postDispatch({
-      type: "GET_POSTS",
-      payload: data,
-    });
-    setLoading(false);
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.get(`${api}post/followingpost`, config);
+      // console.log(data, "feed data");
+      // postDispatch({
+      //   type: "GET_POSTS",
+      //   payload: data,
+      // });
+      console.log(data);
+      setPosts(data);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+    }
   };
   const getUser = async () => {
     const config = {
@@ -47,7 +56,7 @@ const Home = () => {
     };
     console.log(config);
     const { data } = await axios.get(`${api}user/${user._id}`, config);
-    console.log(data, "user data");
+    // console.log(data, "user data");
     userDispatch({
       type: "GET_USER",
       payload: data,
@@ -70,7 +79,7 @@ const Home = () => {
           />
         </div>
       ) : (
-        posts.map((item) => <Post item={item} />)
+        _posts.map((item) => <Post item={item} />)
       )}
     </div>
   );

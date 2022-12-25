@@ -4,19 +4,14 @@ import FadeLoader from "react-spinners/FadeLoader";
 import { useUser } from "../../context/userContext/context";
 import axios from "axios";
 import { api } from "../../constants/api";
-import { usePost } from "../../context/postContext/context";
 import Post from "../post/Post";
 
 const SavedPosts = () => {
   const [loading, setLoading] = useState(false);
+  const [savedPosts, setSavedPosts] = useState([]);
 
-  const {
-    postState: { savedPost },
-    postDispatch,
-  } = usePost();
   const { token } = useUser();
 
-  console.log(savedPost, "savedPost");
   useEffect(() => {}, []);
 
   useEffect(() => {
@@ -33,7 +28,8 @@ const SavedPosts = () => {
       };
 
       const { data } = await axios.get(`${api}save/savedPost`, config);
-      postDispatch({ type: "SAVE", payload: data });
+      // postDispatch({ type: "SAVE", payload: data });
+      setSavedPosts(data);
       setLoading(false);
     } catch (error) {
       console.log(error, "error");
@@ -54,7 +50,7 @@ const SavedPosts = () => {
           />
         </div>
       ) : (
-        savedPost && savedPost?.map((item) => <Post item={item} />)
+        savedPosts.map((item) => <Post item={item} />)
       )}
     </div>
   );

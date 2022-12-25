@@ -5,7 +5,7 @@ const {
   getFeedPosts,
   getMyPosts,
   likePost,
-  commentInPost,
+  commentPost,
   getMyFollowingPosts,
   postById,
   deletePost,
@@ -17,7 +17,7 @@ router.get("/mypost", protect, getMyPosts);
 router.get("/followingpost", protect, getMyFollowingPosts);
 router.put("/:id", protect, updatPost);
 router.post("/", protect, createPost);
-router.put("/comment", protect, commentInPost);
+router.patch("/comment", protect, commentPost);
 router.get("/:id", protect, postById);
 router.delete("/:id", protect, deletePost);
 router.patch("/:id/like", protect, likePost);

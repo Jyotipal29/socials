@@ -13,8 +13,14 @@ import { useUser } from "../../context/userContext/context";
 import { api } from "../../constants/api";
 import Model from "../../components/model/Model";
 const Post = ({ item }) => {
-  console.log(item, "item");
+  // console.log(item, "item");
   const [showMore, setShowMore] = useState(false);
+  const [comm, setComm] = useState(item?.comments ?? []);
+  const [likes, setLikes] = useState(item?.likes ?? []);
+  const [savedPosts, setSavedPosts] = useState([]);
+
+  useEffect(() => {});
+
   const {
     postState: { savedPost },
     postDispatch,
@@ -51,10 +57,11 @@ const Post = ({ item }) => {
 
       const { data } = await axios.patch(`${api}post/${id}/like`, {}, config);
       console.log(data, "like data");
-      postDispatch({
-        type: "LIKE_POST",
-        payload: data,
-      });
+      // postDispatch({
+      //   type: "LIKE_POST",
+      //   payload: data,
+      // });
+      setLikes(data.likes);
       setLikeState({ isLoading: false, id: null });
     } catch (error) {
       console.log(error);
@@ -92,6 +99,23 @@ const Post = ({ item }) => {
     setShowMore((prev) => !prev);
   };
 
+  // comment
+  const makeComment = async (text, id) => {
+    console.log(text, id);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const { data } = await axios.patch(
+      `${api}post/comment`,
+      { text, postId: id },
+      config
+    );
+    const dataG = data.comments;
+    setComm(dataG);
+  };
+  console.log(comm, "comm");
   return (
     <div className="feed-post-container">
       <div className="post-card">
@@ -144,6 +168,13 @@ const Post = ({ item }) => {
           <small className="post-tags">
             {item?.tags?.map((tag) => `#${tag} `)}
           </small>
+          <h4 style={{ color: "#777" }}>comments</h4>
+          {comm.map((it) => (
+            <h6 key={it._id}>
+              <strong>{item?.postedBy?.name}:</strong>
+              {it.text}
+            </h6>
+          ))}
         </div>
         <div className="post-btn">
           <button
@@ -161,19 +192,27 @@ const Post = ({ item }) => {
               <>
                 <FavoriteBorderOutlinedIcon
                   style={{
-                    color: item?.likes?.length > 0 ? "blue" : "inherit",
+                    color: likes.length > 0 ? "blue" : "inherit",
                   }}
                 />
                 <small
                   style={{
-                    color: item?.likes?.length > 0 ? "blue" : "inherit",
+                    color: likes.length > 0 ? "blue" : "inherit",
                   }}
                 >
-                  like {item?.likes?.length}
+                  like {likes.length}
                 </small>
               </>
             )}
           </button>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              makeComment(e.target[0].value, item?._id);
+            }}
+          >
+            <input />
+          </form>
 
           <button
             className="btn post-save-btn"

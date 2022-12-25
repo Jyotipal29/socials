@@ -37,7 +37,9 @@ const createPost = async (req, res) => {
 // /* READ */ all posts
 const getFeedPosts = async (req, res) => {
   try {
-    const post = await Post.find().populate("postedBy", "_id name picturePath");
+    const post = await Post.find()
+      .populate("postedBy", "_id name picturePath")
+      .populate("comments.postedBy", "_id name picturePath");
     res.status(200).json(post);
   } catch (error) {
     res.status(404).json({
@@ -97,7 +99,7 @@ const likePost = async (req, res) => {
         message: "Unauthenticated",
       });
     if (!mongoose.Types.ObjectId.isValid(id))
-      return res.status(404).send("no post with that id");
+      return res.status(404).send("no post with that id like");
     // const { userId } = req.body;
     const post = await Post.findById(id);
     // const isLiked = post.likes.get(userId);
@@ -128,12 +130,13 @@ const likePost = async (req, res) => {
   }
 };
 
-const commentInPost = async (req, res) => {
-  // const { id } = req.params;
+const commentPost = async (req, res) => {
+  // console.log(req.user);
   const comment = {
     text: req.body.text,
-    postedBy: req.user._id,
+    postedBy: req.user.id,
   };
+  console.log(comment, req.body.postId);
   Post.findByIdAndUpdate(
     req.body.postId,
     {
@@ -162,7 +165,7 @@ const commentInPost = async (req, res) => {
 const postById = async (req, res) => {
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id))
-    return res.status(404).send("no video with the id");
+    return res.status(404).send("no post with the id postbyid");
   try {
     const post = await Post.findById(id).populate(
       "postedBy",
@@ -174,21 +177,20 @@ const postById = async (req, res) => {
   }
 };
 
-
 const deletePost = async (req, res) => {
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id))
-    return res.status(404).send("no video with the id");
+    return res.status(404).send("no video with the id delet");
   const post = await Post.findById(id);
   await post.remove();
   res.status(201).json({ message: "post deleted" });
 };
 
 const updatPost = async (req, res) => {
-  const { id } = req.params;
-  if (!mongoose.Types.ObjectId.isValid(id))
-    return res.status(404).send("no post with the id");
   try {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id))
+      return res.status(404).send("no post with the id update");
     const updatedPost = await Post.findByIdAndUpdate(id, req.body, {
       new: true,
     });
@@ -202,7 +204,7 @@ module.exports = {
   getFeedPosts,
   getMyPosts,
   likePost,
-  commentInPost,
+  commentPost,
   getMyFollowingPosts,
   postById,
   deletePost,
