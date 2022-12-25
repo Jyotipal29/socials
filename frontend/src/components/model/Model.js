@@ -30,7 +30,12 @@ const Model = ({ id, showMore, setShowMore }) => {
         delete
       </button>
       <button className="more-edit-btn">
-        <Link to={`/edit/${id}`}>edit</Link>
+        <Link
+          to={`/edit/${id}`}
+          style={{ color: "inherit", textDecoration: "none" }}
+        >
+          edit
+        </Link>
       </button>
       <button className="close-model" onClick={closeHandler}>
         x
