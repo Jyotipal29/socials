@@ -35,6 +35,10 @@ const postReducer = (postState, action) => {
         ...postState,
         savedPost: action.payload,
       };
+    // case "TOGGLE_POST": {
+
+    // }
+
     case "ADD_SAVE":
       return {
         ...postState,

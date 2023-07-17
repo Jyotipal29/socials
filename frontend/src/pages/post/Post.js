@@ -14,20 +14,15 @@ import { useUser } from "../../context/userContext/context";
 import { api } from "../../constants/api";
 import Model from "../../components/model/Model";
 const Post = ({ item }) => {
-  // console.log(item, "item");
   const [showMore, setShowMore] = useState(false);
   const [showComm, setShowComm] = useState(false);
   const [comm, setComm] = useState(item?.comments ?? []);
   const [likes, setLikes] = useState(item?.likes ?? []);
-  const [savedPosts, setSavedPosts] = useState([]);
-
-  useEffect(() => {});
 
   const {
     postState: { savedPost },
     postDispatch,
   } = usePost();
-  console.log(savedPost, "savedPost");
   const [isSaved, setIsSaved] = useState(
     savedPost?.some((it) => it._id === item?.item?._id)
   );
@@ -49,7 +44,6 @@ const Post = ({ item }) => {
   //like
   const likeHandler = async (id) => {
     setLikeState({ isLoading: true, id });
-    console.log(id, "id");
     try {
       const config = {
         headers: {
@@ -58,7 +52,6 @@ const Post = ({ item }) => {
       };
 
       const { data } = await axios.patch(`${api}post/${id}/like`, {}, config);
-      console.log(data, "like data");
       // postDispatch({
       //   type: "LIKE_POST",
       //   payload: data,
@@ -80,21 +73,32 @@ const Post = ({ item }) => {
         Authorization: `Bearer ${token}`,
       },
     };
-    const { dataM } = await axios.post(
+    const { data } = await axios.post(
       `${api}save/toggleSavePost`,
       { postid: id },
       config
     );
-    const { data } = await axios.get(`${api}save/savedPost`, config);
+    // postDispatch({ type: "TOGGLE_POST", payload: data });
+    console.log(data, "the toogle save data");
+    setSaveState({ isLoading: false, id });
+  };
+  useEffect(() => {
+    getAllSavedPost();
+  }, []);
 
-    isSaved
-      ? postDispatch({ type: "SAVE", payload: data })
-      : postDispatch({
-          type: "REMOVE_SAVE",
-          payload: data,
-        });
-    setIsSaved((prev) => !prev);
-    setSaveState({ isLoading: false, id: null });
+  const getAllSavedPost = async () => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const { data } = await axios.get(`${api}save/savedPost`, config);
+      postDispatch({ type: "SAVE", payload: data });
+    } catch (error) {
+      console.log(error, "error");
+    }
   };
 
   const showHandler = () => {
@@ -103,7 +107,6 @@ const Post = ({ item }) => {
 
   // comment
   const makeComment = async (text, id) => {
-    console.log(text, id);
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -117,7 +120,6 @@ const Post = ({ item }) => {
     const dataG = data.comments;
     setComm(dataG);
   };
-  console.log(comm, "comm");
   return (
     <div className="feed-post-container">
       <div className="post-card">

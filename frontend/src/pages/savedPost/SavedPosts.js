@@ -5,13 +5,16 @@ import { useUser } from "../../context/userContext/context";
 import axios from "axios";
 import { api } from "../../constants/api";
 import Post from "../post/Post";
+import { usePost } from "../../context/postContext/context";
 
 const SavedPosts = () => {
   const [loading, setLoading] = useState(false);
-  const [savedPosts, setSavedPosts] = useState([]);
 
   const { token } = useUser();
-
+  const {
+    postState: { savedPost },
+    postDispatch,
+  } = usePost();
   useEffect(() => {}, []);
 
   useEffect(() => {
@@ -28,8 +31,7 @@ const SavedPosts = () => {
       };
 
       const { data } = await axios.get(`${api}save/savedPost`, config);
-      // postDispatch({ type: "SAVE", payload: data });
-      setSavedPosts(data);
+      postDispatch({ type: "SAVE", payload: data });
       setLoading(false);
     } catch (error) {
       console.log(error, "error");
@@ -50,7 +52,7 @@ const SavedPosts = () => {
           />
         </div>
       ) : (
-        savedPosts.map((item) => <Post item={item} />)
+        savedPost.map((item) => <Post item={item} />)
       )}
     </div>
   );

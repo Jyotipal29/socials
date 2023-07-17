@@ -19,7 +19,6 @@ const Explore = () => {
     postDispatch,
   } = usePost();
 
-  console.log(posts, "posts data");
   const {
     userState: { user },
     userDispatch,
@@ -38,7 +37,6 @@ const Explore = () => {
       },
     };
     const { data } = await axios.get(`${api}post/`, config);
-    console.log(data, "feed data");
     postDispatch({
       type: "GET_POSTS",
       payload: data,
