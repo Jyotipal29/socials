@@ -7,6 +7,7 @@ import ModeCommentOutlinedIcon from "@mui/icons-material/ModeCommentOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { usePost } from "../../context/postContext/context";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -16,9 +17,10 @@ import Model from "../../components/model/Model";
 const Post = ({ item }) => {
   const [showMore, setShowMore] = useState(false);
   const [showComm, setShowComm] = useState(false);
+  const [showAllComm, setShowAllComm] = useState(false);
   const [comm, setComm] = useState(item?.comments ?? []);
   const [likes, setLikes] = useState(item?.likes ?? []);
-
+  const [inputVal, setInputVal] = useState("");
   const {
     postState: { savedPost },
     postDispatch,
@@ -118,9 +120,29 @@ const Post = ({ item }) => {
     const dataG = data.comments;
     setComm(dataG);
   };
+
+  console.log(comm, "this is comm");
+
+  const deleteComm = async (commentId, postId) => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.delete(
+        `${api}post/comment`,
+        { postId, commentId },
+        config
+      );
+      console.log(data, "deleted data");
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
   return (
     <div className="feed-post-container">
-      <div className="post-card">
+      <div className="post-card w-full">
         <div className="post-profile-details">
           <Link
             to={
@@ -170,13 +192,6 @@ const Post = ({ item }) => {
           <small className="post-tags">
             {item?.tags?.map((tag) => `#${tag} `)}
           </small>
-          <small style={{ color: "#777" }}>comments</small>
-          {comm.map((it) => (
-            <div key={it._id} className="post-comm">
-              <strong>{item?.postedBy?.name}:</strong>
-              {it.text}
-            </div>
-          ))}
         </div>
         <div className="post-btn">
           <button
@@ -232,17 +247,55 @@ const Post = ({ item }) => {
             )}
           </button>
         </div>
-        <div>
+        <div className="w-full">
           {showComm && (
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                makeComment(e.target[0].value, item?._id);
-              }}
-            >
-              <input />
-              <button>comment</button>
-            </form>
+            <>
+              <form
+                className="w-full"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  makeComment(inputVal, item?._id);
+                  setInputVal("");
+                  setShowAllComm(true);
+                }}
+              >
+                <div className="w-full">
+                  <input
+                    placeholder="add a comment"
+                    className="border-b outline-none py-1 px-5"
+                    value={inputVal}
+                    onChange={(e) => setInputVal(e.target.value)}
+                  />
+                  <button className="text-blue-600">comment</button>
+                </div>
+              </form>
+              <div
+                className="flex space-x-6 py-2"
+                onClick={() => setShowAllComm(!showAllComm)}
+              >
+                <p className="cursor-pointer">
+                  {" "}
+                  show all {comm.length} comments
+                </p>{" "}
+                <p></p>
+              </div>
+              {showAllComm &&
+                comm.map((it) => (
+                  <div key={it._id} className="ml-12 py-3 flex justify-between">
+                    <div className="flex space-x-3">
+                      <p>{item?.postedBy?.name}:</p>
+                      <p> {it.text}</p>
+                    </div>
+
+                    <button
+                      className=""
+                      onClick={() => deleteComm(it._id, item._id)}
+                    >
+                      <DeleteOutlineIcon className="text-red-600" />
+                    </button>
+                  </div>
+                ))}
+            </>
           )}
         </div>
       </div>

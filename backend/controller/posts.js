@@ -131,7 +131,6 @@ const likePost = async (req, res) => {
 };
 
 const commentPost = async (req, res) => {
-  // console.log(req.user);
   const comment = {
     text: req.body.text,
     postedBy: req.user.id,
@@ -148,7 +147,7 @@ const commentPost = async (req, res) => {
       new: true,
     }
   )
-    .populate("comments.postedBy", "_id name")
+    .populate("comments.postedBy", "_id name picturePath")
     .exec((error, result) => {
       if (error) {
         res.status(422).json({
@@ -158,6 +157,32 @@ const commentPost = async (req, res) => {
         res.json(result);
       }
     });
+};
+
+//delete post
+const deleteComment = async (req, res) => {
+  const postId = req.body.postId;
+  const commentId = req.body.commentId;
+
+  try {
+    const updatedPost = await Post.findByIdAndUpdate(
+      postId,
+      {
+        $pull: {
+          comments: { _id: commentId },
+        },
+      },
+      { new: true }
+    ).populate("comments.postedBy", "_id name picturePath");
+
+    if (!updatedPost) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    res.status(200).json(updatedPost);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 // get one post by id
@@ -209,4 +234,5 @@ module.exports = {
   postById,
   deletePost,
   updatPost,
+  deleteComment,
 };
