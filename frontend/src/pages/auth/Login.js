@@ -5,11 +5,14 @@ import "react-toastify/dist/ReactToastify.css";
 import { api } from "../../constants/api";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../../context/userContext/context";
+import ClipLoader from "react-spinners/ClipLoader";
+
 import "./auth.css";
 const SignIn = () => {
   const [email, setEmail] = useState(" ");
   const [password, setPassword] = useState(" ");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const {
     userState: { user },
@@ -23,6 +26,7 @@ const SignIn = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true);
       const { data } = await axios.post(`${api}auth/login`, {
         email,
         password,
@@ -32,7 +36,7 @@ const SignIn = () => {
       const token = data.token;
       if (data) {
         userDispatch({ type: "LOGIN", payload: data });
-
+        setLoading(false);
         localStorage.setItem("user", JSON.stringify(data));
         localStorage.setItem("isAuth", true);
         localStorage.setItem("token", token);
@@ -44,7 +48,7 @@ const SignIn = () => {
       navigate("/");
     } catch (error) {
       setError(error.response.data.message);
-
+      setLoading(false);
       setTimeout(() => {
         setError("");
       }, 5000);
@@ -55,13 +59,14 @@ const SignIn = () => {
   return (
     <div className="auth-container">
       <div className="auth-wrapper">
-        <form className="auth-form">
-          <h2 className="auth-heading">Sign In</h2>
+        <form className="space-y-5">
+          <h2 className="auth-heading">Log In</h2>
           {error && <span className="error-message">{error}</span>}
           <div className="auth-form-control">
             <small>email</small>
             <input
               placeholder="email"
+              className="border-2 outline-none w-full py-2"
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
@@ -69,15 +74,28 @@ const SignIn = () => {
             <small>password</small>
             <input
               type="password"
+              className="border-2 outline-none w-full py-2"
               placeholder="password"
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <button onClick={handleLogin} className="auth-btn">
-            Sign In
+          <button
+            onClick={handleLogin}
+            className="bg-blue-600 w-20 h-8 text-white"
+          >
+            {loading ? (
+              <ClipLoader
+                color="white"
+                size={20}
+                speedMultiplier={0.5}
+                loading={loading}
+              />
+            ) : (
+              "Log In"
+            )}
           </button>
 
-          <button className="auth-btn-sec">
+          <button className="auth-btn-sec px-2">
             <Link to="/register"> dont have an account ? register</Link>
           </button>
         </form>

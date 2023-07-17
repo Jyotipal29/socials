@@ -78,10 +78,10 @@ const Profile = () => {
         <div className="loader-profile">
           <FadeLoader
             color="blue"
-            height={100}
+            height={10}
             speedMultiplier={2}
             width={1}
-            margin={50}
+            margin={5}
             loading={loading}
           />
         </div>

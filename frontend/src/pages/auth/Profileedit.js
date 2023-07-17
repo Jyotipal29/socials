@@ -84,6 +84,7 @@ const Profileedit = () => {
             <input
               placeholder="name"
               value={formData.name}
+              className="border-2 outline-none w-full py-2"
               onChange={(e) =>
                 setFormData({ ...formData, name: e.target.value })
               }

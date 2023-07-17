@@ -15,6 +15,7 @@ const Register = () => {
     password: " ",
     picturePath: " ",
   });
+  const [loading, setLoading] = useState(false);
   // const [name, setName] = useState(" ");
   // const [email, setEmail] = useState(" ");
   // const [password, setPassword] = useState(" ");
@@ -52,21 +53,15 @@ const Register = () => {
   };
   const registerHandler = async (e) => {
     e.preventDefault();
-    console.log(formData, "all data");
-    // if (password !== cnfPassword) {
-    //   setPassword("");
-    //   setCnfPassword("");
-    //   setTimeout(() => {
-    //     setError(" ");
-    //   }, 5000);
-    //   return setError(" password do not match");
-    // }
+
     try {
-      const { data } = await axios.post(`${api}auth/register`, { formData });
+      setLoading(true);
+      const { data } = await axios.post(`${api}auth/register`, formData);
       console.log(data, "register data");
       const token = data.token;
       if (data) {
         userDispatch({ type: "REGISTER", payload: data });
+        setLoading(false);
         console.log("user data", data);
         localStorage.setItem("user", JSON.stringify(data));
         localStorage.setItem("isAuth", true);
@@ -78,6 +73,7 @@ const Register = () => {
 
       navigate("/");
     } catch (error) {
+      setLoading(false);
       let errorMessage =
         error?.response?.data?.message || "Something went wrong";
 
@@ -100,6 +96,7 @@ const Register = () => {
             <small>Name</small>
             <input
               placeholder="name"
+              className="border-2 outline-none w-full py-2"
               onChange={(e) =>
                 setFormData({ ...formData, name: e.target.value })
               }
@@ -109,6 +106,7 @@ const Register = () => {
             <small>email</small>
             <input
               placeholder="email"
+              className="border-2 outline-none w-full py-2"
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
               }
@@ -119,6 +117,7 @@ const Register = () => {
             <input
               type="password"
               placeholder="password"
+              className="border-2 outline-none w-full py-2"
               onChange={(e) =>
                 setFormData({ ...formData, password: e.target.value })
               }
@@ -140,9 +139,18 @@ const Register = () => {
                 : "#eee",
             }}
           >
-            sign up
+            {loading ? (
+              <ClipLoader
+                color="white"
+                size={20}
+                speedMultiplier={0.5}
+                loading={loading}
+              />
+            ) : (
+              "Register"
+            )}
           </button>
-          <button className="auth-btn-sec login">
+          <button className="auth-btn-sec login px-2">
             <Link to="/login"> already have an account ? login</Link>
           </button>
         </form>

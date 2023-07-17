@@ -77,15 +77,15 @@ const EditForm = () => {
     navigate(`/sp/${id}`);
   };
   return (
-    <div className="create-form-container">
-      <div className="create-form-wrapper">
-        <form className="create-form" onSubmit={submitHandler}>
+    <div className=" mt-32 container mx-auto max-w-md">
+      <div className="flex justify-center items-center shadow-lg w-full">
+        <form className="py-5 space-y-6" onSubmit={submitHandler}>
           <h2 className="form-heading"> Edit Post</h2>
 
           <div className="form-control">
             <label>caption</label>
             <input
-              className="form-input"
+              className="border-2 outline-none w-full py-2"
               name="caption"
               value={postData.caption}
               onChange={(e) =>
@@ -97,7 +97,7 @@ const EditForm = () => {
           <div className="form-control">
             <label>tags</label>
             <input
-              className="form-input"
+              className="border-2 outline-none w-full py-2"
               name="tags"
               value={postData.tags}
               onChange={(e) =>

@@ -71,10 +71,10 @@ const Home = () => {
         <div className="loader">
           <FadeLoader
             color="blue"
-            height={100}
+            height={10}
             speedMultiplier={2}
-            width={1}
-            margin={50}
+            width={2}
+            margin={2}
             loading={loading}
           />
         </div>
