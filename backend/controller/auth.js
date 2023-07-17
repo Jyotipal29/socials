@@ -3,7 +3,8 @@ const jwt = require("jsonwebtoken");
 const User = require("../model/user");
 const register = async (req, res) => {
   try {
-    let { name, email, password, picturePath } = req.body["formData"];
+    let { name, email, password, picturePath } = req.body;
+    console.log({ name, email, password, picturePath });
     // picturePath = JSON.stringify(picturePath);
 
     if (!name || !email || !password || !picturePath) {

@@ -1,31 +1,29 @@
-const Post = require("../model/post");
-const User = require("../model/user");
-const savedPost = require("../model/saved");
+const SavedPost = require("../model/saved");
 const toggleSavePost = async (req, res) => {
+  const userId = req.user.id;
+  const postId = req.body.id;
   try {
-    const post = await SavedPost.findOne({
-      user: req.user._id,
-      post: req.body,
-    });
+    const savedPost = await SavedPost.findOne({ user: userId, post: postId });
 
-    if (post) {
+    if (savedPost) {
       await savedPost.remove();
+      res.status(200).json({ message: "Post removed from saved posts" });
     } else {
-      await SavedPost.create({ user: req.user._id, post: req.body });
+      await SavedPost.create({ user: userId, post: postId });
+      res.status(200).json({ message: "Post added to saved posts" });
     }
-
-    res.status(200).json(savedPost);
   } catch (error) {
-    res.status(401).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
 const getSavedPosts = async (req, res) => {
+  console.log(SavedPost);
   try {
-    const savedPost = await SavedPost.find({ user: req.user._id })
+    const post = await SavedPost.find({ user: req.user._id })
       .populate("post", "-__v")
       .sort({ savedAt: -1 });
-    res.status(200).json(savedPost);
+    res.status(200).json(post);
   } catch (error) {
     res.status(401).json({ message: error.message });
   }
@@ -35,4 +33,3 @@ module.exports = {
   toggleSavePost,
   getSavedPosts,
 };
-

@@ -24,7 +24,7 @@ const UserSchema = mongoose.Schema(
     },
     picturePath: {
       type: String,
-      default: "",
+      default: " ",
     },
     savedPosts: {
       type: [mongoose.Schema.Types.ObjectId],

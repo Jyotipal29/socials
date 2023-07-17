@@ -23,9 +23,6 @@ const Post = ({ item }) => {
     postState: { savedPost },
     postDispatch,
   } = usePost();
-  const [isSaved, setIsSaved] = useState(
-    savedPost?.some((it) => it._id === item?.item?._id)
-  );
 
   const [likeState, setLikeState] = useState({
     id: null,
@@ -78,7 +75,8 @@ const Post = ({ item }) => {
       { postid: id },
       config
     );
-    // postDispatch({ type: "TOGGLE_POST", payload: data });
+    getAllSavedPost();
+
     console.log(data, "the toogle save data");
     setSaveState({ isLoading: false, id });
   };
@@ -227,10 +225,10 @@ const Post = ({ item }) => {
                 speedMultiplier={0.5}
                 loading={saveState?.isLoading}
               />
+            ) : savedPost.some((it) => it._id === item._id) ? (
+              <BookmarkBorderOutlinedIcon style={{ color: "blue" }} />
             ) : (
-              <>
-                <BookmarkBorderOutlinedIcon />
-              </>
+              <BookmarkBorderOutlinedIcon />
             )}
           </button>
         </div>

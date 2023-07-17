@@ -20,5 +20,5 @@ const savedPostSchema = mongoose.Schema(
   { timestamps: true }
 );
 
-const savedPost = mongoose.model("SavedPost", savedPostSchema);
-module.exports = savedPost;
+const SavedPost = mongoose.model("SavedPost", savedPostSchema);
+module.exports = SavedPost;

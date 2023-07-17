@@ -9,35 +9,40 @@ import { usePost } from "../../context/postContext/context";
 
 const SavedPosts = () => {
   const [loading, setLoading] = useState(false);
+const [saveState, setSaveState] = useState({
+  id: null,
+  isLoading: false,
+});
 
-  const { token } = useUser();
-  const {
-    postState: { savedPost },
-    postDispatch,
-  } = usePost();
-  useEffect(() => {}, []);
+const { token } = useUser();
+const {
+  postState: { savedPost },
+  postDispatch,
+} = usePost();
+useEffect(() => {}, []);
 
-  useEffect(() => {
-    getAllSavedPost();
-  }, []);
+const getAllSavedPost = async () => {
+  setLoading(true);
+  try {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
 
-  const getAllSavedPost = async () => {
-    setLoading(true);
-    try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
+    const { data } = await axios.get(`${api}save/savedPost`, config);
+    console.log(data, "the saved data");
+    postDispatch({ type: "SAVE", payload: data });
+    setLoading(false);
+  } catch (error) {
+    console.log(error, "error");
+  }
+};
 
-      const { data } = await axios.get(`${api}save/savedPost`, config);
-      postDispatch({ type: "SAVE", payload: data });
-      setLoading(false);
-    } catch (error) {
-      console.log(error, "error");
-    }
-  };
-
+useEffect(() => {
+  getAllSavedPost();
+}, []);
+  
   return (
     <div className="saved-container">
       {loading ? (
