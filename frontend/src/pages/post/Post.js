@@ -285,20 +285,24 @@ const Post = ({ item }) => {
                   <div key={it._id} className="ml-12 py-3 flex justify-between">
                     <div className="flex space-x-3">
                       <img
-                          src={it?.postedBy?.picturePath}
-                          width="40px"
-                          height="40"
-                        />
-                      <p>{it?.postedBy?.name}:</p>
+                        src={it?.postedBy?.picturePath}
+                        width="40px"
+                        height="40"
+                        className="rounded-full"
+                        alt=""
+                      />
+                      <p className="">{it?.postedBy?.name}:</p>
                       <p> {it.text}</p>
                     </div>
-
-                    <button
-                      className=""
-                      onClick={() => deleteComm(it._id, item._id)}
-                    >
-                      <DeleteOutlineIcon className="text-red-600" />
-                    </button>
+                    {user._id === it.postedBy._id ||
+                    user._id === item.postedBy._id ? (
+                      <button
+                        className=""
+                        onClick={() => deleteComm(it._id, item._id)}
+                      >
+                        <DeleteOutlineIcon className="text-red-600" />
+                      </button>
+                    ) : null}
                   </div>
                 ))}
             </>
