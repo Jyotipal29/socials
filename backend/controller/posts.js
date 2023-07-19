@@ -178,8 +178,8 @@ const deleteComment = async (req, res) => {
     if (!updatedPost) {
       return res.status(404).json({ message: "Post not found" });
     }
-
-    res.status(200).json(updatedPost);
+    const comments = updatedPost.comments;
+    res.status(200).json(comments);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
