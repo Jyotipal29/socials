@@ -59,13 +59,14 @@ const SignIn = () => {
   return (
     <div className="auth-container">
       <div className="auth-wrapper">
-        <form className="space-y-5">
+        <form className="space-y-5" onSubmit={handleLogin}>
           <h2 className="auth-heading">Log In</h2>
           {error && <span className="error-message">{error}</span>}
           <div className="auth-form-control">
             <small>email</small>
             <input
               placeholder="email"
+              value={email}
               className="border-2 outline-none w-full py-2"
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -74,30 +75,40 @@ const SignIn = () => {
             <small>password</small>
             <input
               type="password"
+              value={password}
               className="border-2 outline-none w-full py-2"
               placeholder="password"
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <button
-            onClick={handleLogin}
-            className="bg-blue-600 w-20 h-8 text-white"
-          >
-            {loading ? (
-              <ClipLoader
-                color="white"
-                size={20}
-                speedMultiplier={0.5}
-                loading={loading}
-              />
-            ) : (
-              "Log In"
-            )}
-          </button>
-
-          <button className="auth-btn-sec px-2">
-            <Link to="/register"> dont have an account ? register</Link>
-          </button>
+          <div className="flex flex-col space-y-2 ">
+            <button type="submit" className="bg-blue-600 py-2  text-white">
+              {loading ? (
+                <ClipLoader
+                  color="white"
+                  size={20}
+                  speedMultiplier={0.5}
+                  loading={loading}
+                />
+              ) : (
+                "Log In"
+              )}
+            </button>
+            <button
+              type="button"
+              className="border-2 border-blue-600 py-1  text-blue-600"
+              onClick={(e) => {
+                e.preventDefault();
+                setEmail("guest@gmail.com");
+                setPassword("guest");
+              }}
+            >
+              guest login
+            </button>
+            <button className="auth-btn-sec px-2">
+              <Link to="/register"> dont have an account ? register</Link>
+            </button>
+          </div>
         </form>
       </div>
       <ToastContainer />

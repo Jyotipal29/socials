@@ -4,6 +4,7 @@ import { useUser } from "../../context/userContext/context";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { api } from "../../constants/api";
+import { Link } from "react-router-dom";
 const OtherProfile = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -114,6 +115,8 @@ const OtherProfile = () => {
     });
     setShowFollow(true);
   };
+
+  console.log(profileData, "this is profile data");
 
   return (
     <div className="profile-container">

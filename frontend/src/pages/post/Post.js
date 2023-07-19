@@ -182,7 +182,13 @@ const Post = ({ item }) => {
 
         <div className="post-details">
           <Link to={`/sp/${item?._id}`}>
-            <img src={item?.picturePath} alt="" />
+            <div className="w-96  py-2">
+              <img
+                src={item?.picturePath}
+                alt=""
+                className=" w-full h-full object-cover "
+              />
+            </div>
           </Link>
           <small className="post-caption">
             <strong style={{ color: "#0f172a" }}>
@@ -286,9 +292,7 @@ const Post = ({ item }) => {
                     <div className="flex space-x-3">
                       <img
                         src={it?.postedBy?.picturePath}
-                        width="40px"
-                        height="40"
-                        className="rounded-full"
+                        className=" h-8 w-8 rounded-full"
                         alt=""
                       />
                       <p className="">{it?.postedBy?.name}:</p>

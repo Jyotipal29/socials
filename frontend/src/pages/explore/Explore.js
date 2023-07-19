@@ -45,22 +45,25 @@ const Explore = () => {
   };
 
   return (
-    <div className="explore-container">
-      {loading ? (
-        <div className="loader">
-          <FadeLoader
-            color="blue"
-            height={10}
-            speedMultiplier={2}
-            width={1}
-            margin={5}
-            loading={loading}
-          />
-        </div>
-      ) : (
-        posts.map((item) => <Post item={item} />)
-      )}
-    </div>
+    <>
+      <div className="explore-container">
+        {loading ? (
+          <div className="loader">
+            <FadeLoader
+              color="blue"
+              height={10}
+              speedMultiplier={2}
+              width={1}
+              margin={5}
+              loading={loading}
+            />
+          </div>
+        ) : (
+          posts.map((item) => <Post item={item} />)
+        )}
+      </div>
+      <div className="mt-12"></div>
+    </>
   );
 };
 

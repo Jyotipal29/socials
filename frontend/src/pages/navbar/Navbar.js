@@ -22,7 +22,11 @@ const Navbar = () => {
         <ul className="nav-profile">
           <Link to="/profile">
             <li className="nav-profile-item">
-              <img src={user.picturePath} className="nav-user-img" />
+              <img
+                src={user.picturePath}
+                className="w-10 h-10 rounded-full  object-top"
+                alt=""
+              />
             </li>
           </Link>
 
