@@ -130,7 +130,7 @@ const Post = ({ item }) => {
           Authorization: `Bearer ${token}`,
         },
       };
-      const { data } = await axios.delete(
+      const { data } = await axios.post(
         `${api}post/comment`,
         { postId, commentId },
         config
@@ -284,7 +284,12 @@ const Post = ({ item }) => {
                 comm.map((it) => (
                   <div key={it._id} className="ml-12 py-3 flex justify-between">
                     <div className="flex space-x-3">
-                      <p>{item?.postedBy?.name}:</p>
+                      <img
+                          src={it?.postedBy?.picturePath}
+                          width="40px"
+                          height="40"
+                        />
+                      <p>{it?.postedBy?.name}:</p>
                       <p> {it.text}</p>
                     </div>
 
