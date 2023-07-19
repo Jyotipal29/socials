@@ -136,6 +136,7 @@ const Post = ({ item }) => {
         config
       );
       console.log(data, "deleted data");
+      setComm(data);
     } catch (error) {
       console.log(error.message);
     }
