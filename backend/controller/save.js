@@ -1,7 +1,7 @@
 const SavedPost = require("../model/saved");
 const toggleSavePost = async (req, res) => {
-  const userId = req.user.id;
-  const postId = req.body.id;
+  const {userId, postId} = req.body;
+  
   try {
     const savedPost = await SavedPost.findOne({ user: userId, post: postId });
 
