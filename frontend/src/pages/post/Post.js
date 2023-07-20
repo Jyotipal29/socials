@@ -74,7 +74,7 @@ const Post = ({ item }) => {
     };
     const { data } = await axios.post(
       `${api}save/toggleSavePost`,
-      { postid: id },
+      {userId: user._id, postId:id}
       config
     );
     getAllSavedPost();
