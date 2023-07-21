@@ -146,8 +146,8 @@ const OtherProfile = () => {
         {profileData?.userPosts?.map(
           (item) =>
             item.picturePath.includes("/") && (
-              <Link to={/sp/${item._id}}>
-                <img src={item.picturePath} className="item" />
+              <Link to={`/sp/${item._id}`}>
+                <img src={item.picturePath} className="item" alt="" />
               </Link>
             )
         )}

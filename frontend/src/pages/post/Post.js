@@ -15,6 +15,7 @@ import { useUser } from "../../context/userContext/context";
 import { api } from "../../constants/api";
 import Model from "../../components/model/Model";
 const Post = ({ item }) => {
+  console.log(item, "this is item");
   const [showMore, setShowMore] = useState(false);
   const [showComm, setShowComm] = useState(false);
   const [showAllComm, setShowAllComm] = useState(false);
@@ -74,12 +75,11 @@ const Post = ({ item }) => {
     };
     const { data } = await axios.post(
       `${api}save/toggleSavePost`,
-      {userId: user._id, postId:id}
+      { userId: user._id, postId: id },
       config
     );
     getAllSavedPost();
 
-    console.log(data, "the toogle save data");
     setSaveState({ isLoading: false, id });
   };
   useEffect(() => {
@@ -121,8 +121,6 @@ const Post = ({ item }) => {
     setComm(dataG);
   };
 
-  console.log(comm, "this is comm");
-
   const deleteComm = async (commentId, postId) => {
     try {
       const config = {
@@ -135,7 +133,6 @@ const Post = ({ item }) => {
         { postId, commentId },
         config
       );
-      console.log(data, "deleted data");
       setComm(data);
     } catch (error) {
       console.log(error.message);

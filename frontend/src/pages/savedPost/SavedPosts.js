@@ -20,7 +20,6 @@ const {
   postDispatch,
 } = usePost();
 useEffect(() => {}, []);
-
 const getAllSavedPost = async () => {
   setLoading(true);
   try {
@@ -31,8 +30,8 @@ const getAllSavedPost = async () => {
     };
 
     const { data } = await axios.get(`${api}save/savedPost`, config);
-    console.log(data, "the saved data");
-    postDispatch({ type: "SAVE", payload: data });
+    const post = data.map((item) => item.post);
+    postDispatch({ type: "SAVE", payload: post });
     setLoading(false);
   } catch (error) {
     console.log(error, "error");
@@ -42,25 +41,24 @@ const getAllSavedPost = async () => {
 useEffect(() => {
   getAllSavedPost();
 }, []);
-  
-  return (
-    <div className="saved-container">
-      {loading ? (
-        <div className="loader">
-          <FadeLoader
-            color="blue"
-            height={10}
-            speedMultiplier={2}
-            width={1}
-            margin={5}
-            loading={loading}
-          />
-        </div>
-      ) : (
-        savedPost.map((item) => <Post item={item} />)
-      )}
-    </div>
-  );
+return (
+  <div className="saved-container">
+    {loading ? (
+      <div className="loader">
+        <FadeLoader
+          color="blue"
+          height={10}
+          speedMultiplier={2}
+          width={1}
+          margin={5}
+          loading={loading}
+        />
+      </div>
+    ) : (
+      savedPost.map((item) => <Post item={item} />)
+    )}
+  </div>
+);
 };
 
 export default SavedPosts;
