@@ -95,7 +95,9 @@ const Post = ({ item }) => {
       };
 
       const { data } = await axios.get(`${api}save/savedPost`, config);
-      postDispatch({ type: "SAVE", payload: data });
+      const post = data.map((item) => item.post);
+      postDispatch({ type: "SAVE", payload: post });
+      // postDispatch({ type: "SAVE", payload: data });
     } catch (error) {
       console.log(error, "error");
     }
